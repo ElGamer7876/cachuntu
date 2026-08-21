@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Cachuntu</title>
+  <desc id="desc">Símbolo abstracto C con un núcleo geométrico.</desc>
+  <defs>
+    <linearGradient id="g" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff6b35"/>
+      <stop offset="0.48" stop-color="#ff9c55"/>
+      <stop offset="1" stop-color="#7c5cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="#10141d"/>
+  <path d="M89 35.5A39 39 0 1 0 89 92.5" fill="none" stroke="url(#g)" stroke-width="17" stroke-linecap="round"/>
+  <path d="M69 48 88 64 69 80 50 64Z" fill="#41d9ff" opacity=".95"/>
+  <circle cx="89" cy="35.5" r="6.5" fill="#ffb16f"/>
+  <circle cx="89" cy="92.5" r="6.5" fill="#8e72ff"/>
+</svg>
