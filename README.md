@@ -13,23 +13,13 @@ una selección útil de paquetes y configuraciones.
 ## Estado actual
 
 - Concepto e identidad inicial definidos.
-- Sitio web funcional y publicado mediante ChatGPT Sites.
 - Repositorio y licencias abiertos.
 - Construcción del sistema base apenas iniciada.
 - Primera ISO booteable pendiente.
 
-El contenido disponible actualmente corresponde principalmente al sitio web,
-la identidad y la planificación. No representa todavía una distribución
+El contenido disponible actualmente corresponde principalmente a la identidad,
+la documentación y la planificación. No representa todavía una distribución
 funcional.
-
-## Sitio
-
-- Sitio actual: <https://cachuntu.elgamer7876.chatgpt.site>
-- Dominio previsto: <https://cachuntu.dev> — todavía no adquirido ni activo.
-
-El sitio utiliza Vinext/React y mantiene HTML semántico, diseño responsive,
-metadatos SEO, Open Graph, rutas informativas y una política de seguridad
-orientada a HTTPS.
 
 ## Roadmap
 
@@ -55,7 +45,7 @@ El proceso formal de contribución todavía está en preparación. Antes de acep
 cambios al futuro sistema base se documentarán el método de construcción, los
 criterios de paquetes y las pruebas mínimas.
 
-Mientras tanto, los reportes sobre el sitio y la documentación deben distinguir
+Mientras tanto, los reportes sobre la documentación deben distinguir
 claramente entre funciones implementadas, ideas y decisiones aún no tomadas.
 
 ## Marcas y afiliación
