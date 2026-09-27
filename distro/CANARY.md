@@ -1,15 +1,7 @@
 # Cachuntu canary 26.10
 
-Esta rama se reserva para pruebas de compatibilidad con **Ubuntu 26.10**
-amd64. No es una fuente de paquetes para `lts/26.04` y no se publica
-como edición LTS.
+This branch is reserved for amd64 compatibility testing with **Ubuntu 26.10**. It is not a package source for `lts/26.04` and is not published as an LTS edition.
 
-La Beta de Ubuntu 26.10 está prevista para octubre de 2026. Antes de
-generar una ISO canary, fijar una imagen oficial completa de Kubuntu/Ubuntu
-26.10 por URL, fecha y SHA256. No mezclar paquetes 26.10 en una raíz 26.04
-ni habilitar `-proposed` en imágenes para usuarios.
+Before producing a canary ISO, pin a complete official Kubuntu or Ubuntu 26.10 image by URL, date, and SHA256. Do not mix 26.10 packages into a 26.04 root filesystem or enable `-proposed` in user images.
 
-Probar KDE Plasma, GNOME, Calamares, kernel, initramfs, NetworkManager,
-PipeWire, portales, firmware, DKMS, Secure Boot y actualización
-postinstalación en QCOW2. Llevar a LTS solo cambios de código o
-configuración compatibles con Ubuntu 26.04 y validados allí por separado.
+Test KDE Plasma, GNOME, Calamares, kernel, initramfs, NetworkManager, PipeWire, desktop portals, firmware, DKMS, Secure Boot, and postinstallation upgrades on a QCOW2 disk. Transfer only code or configuration changes that are compatible with Ubuntu 26.04 and separately validated there.
