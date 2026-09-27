@@ -9,10 +9,11 @@ workdir=${3:?mounted ext4 workdir}
 [[ -f "$source_iso" && ! -e "$output_iso" ]] || { echo "Source missing or output already exists" >&2; exit 1; }
 [[ "$(basename "$source_iso")" == "$BASE_ISO" ]] || { echo "Unexpected base ISO" >&2; exit 1; }
 [[ "$(findmnt -n -o FSTYPE -T "$workdir")" == ext4 ]] || { echo "Workdir must be ext4" >&2; exit 1; }
+log="${BUILD_LOG:-${output_iso}.build.log}"
+exec > >(tee -a "$log") 2>&1
+echo "Verifying source ISO: $source_iso"
 printf '%s  %s\n' "$BASE_SHA256" "$source_iso" | sha256sum -c -
 scratch=$(mktemp -d "$workdir/cachuntu.XXXXXXXX")
-log="${output_iso}.build.log"
-exec > >(tee -a "$log") 2>&1
 echo "Cachuntu $CACHUNTU_VERSION build from $BASE_ISO"
 echo "Scratch: $scratch"
 xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$scratch/base.squashfs"
