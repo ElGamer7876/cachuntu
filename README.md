@@ -25,6 +25,10 @@ See [the distribution build guide](distro/README.md), [test plan](distro/qa/TEST
 
 The GPLv3 text is in [LICENSE](LICENSE). The CC BY-SA 4.0 notice and legal code link are in [LICENSES/CC-BY-SA-4.0.txt](LICENSES/CC-BY-SA-4.0.txt).
 
+## Language
+
+Project Markdown and release notes use English by default. Installer translations can be maintained alongside English source text.
+
 ## Contributions
 
 Please distinguish implemented features from plans when reporting issues. Build and test procedures are documented before accepting changes to the distribution base.
