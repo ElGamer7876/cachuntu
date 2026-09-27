@@ -6,7 +6,7 @@ Use a new QCOW2 virtual disk in QEMU/KVM. Never select a physical disk.
 2. Boot in UEFI and BIOS. Check the live Plasma session, NetworkManager, PipeWire, file chooser, and desktop portals.
 3. Open Calamares. KDE Plasma must be selected by default. GNOME and the gaming, multimedia, and development groups must each have a description.
 4. Install KDE to QCOW2, restart without the ISO, verify `cachuntu-defaults` and `linux-generic`, and run `sudo /usr/lib/cachuntu/post-install-qa`.
-5. Run `apt update && apt full-upgrade`, restart, and repeat QA. Review `apt-get -s autoremove` before removing anything.
+5. Run `apt update && apt full-upgrade`, restart, and repeat QA. The portal check must report at least `xdg-desktop-portal 1.21.1+ds-1ubuntu3.1`, the Ubuntu 26.04 fix for USN-8287-2. Review `apt-get -s autoremove` before removing anything.
 6. Test trash and restore, file open/save, screenshot, and PipeWire screen sharing. Repeat with Flatpak if installed.
 7. Test GNOME and each optional group with and without network access. Choices absent from the ISO need internet access.
 8. On suitable hardware or a VM with NVIDIA and Secure Boot, test MOK, DKMS, `nvidia-smi`, Wayland, and suspend/resume after a kernel upgrade.

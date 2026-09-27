@@ -19,6 +19,13 @@ if printf '%s\n' "$simulation" | grep -Eq '^Remv (linux-(generic|image|headers)|
   failed=1
 fi
 dpkg-query -W xdg-desktop-portal xdg-desktop-portal-kde pipewire wireplumber 2>&1 || failed=1
+portal_version=$(dpkg-query -W -f='${Version}' xdg-desktop-portal 2>/dev/null) || portal_version=""
+if [[ -n "$portal_version" ]] && dpkg --compare-versions "$portal_version" ge "1.21.1+ds-1ubuntu3.1"; then
+  printf 'OK XDG Desktop Portal regression fix: %s\n' "$portal_version"
+else
+  printf 'FAIL XDG Desktop Portal needs Ubuntu USN-8287-2 fix (installed: %s)\n' "$portal_version" >&2
+  failed=1
+fi
 journalctl -b -p err --no-pager 2>&1 | tail -n 80
 if command -v nvidia-smi >/dev/null; then nvidia-smi || failed=1; fi
 exit "$failed"
