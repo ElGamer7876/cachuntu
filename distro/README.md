@@ -11,6 +11,6 @@ sudo bash distro/prepare-workdir.sh /mnt/e/Cachuntu-build/work.ext4 /mnt/cachunt
 sudo bash distro/build-iso.sh /mnt/e/Cachuntu-build/kubuntu-26.04.1-desktop-amd64.iso /mnt/e/Cachuntu-build/cachuntu-26.9.27-preview-amd64.iso /mnt/cachuntu-work
 ```
 
-Requirements: `xorriso`, `squashfs-tools`, `python3-yaml`, and `dpkg-dev`. The scripts verify the source before writing and refuse to overwrite an existing output ISO. The scratch area must use ext4 and is retained for diagnostics. No host partition or bootloader is used.
+Requirements: `xorriso`, `squashfs-tools`, `python3-yaml`, `dpkg-dev`, and `curl`. The scripts verify the source before writing, install a SHA256-pinned Ubuntu portal security fix, and refuse to overwrite an existing output ISO. The scratch area must use ext4 and is retained for diagnostics. No host partition or bootloader is used.
 
 The ISO build and QEMU/KVM installation must pass [the test plan](qa/TEST_PLAN.md) before announcing a public release.

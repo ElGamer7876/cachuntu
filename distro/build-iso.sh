@@ -21,7 +21,16 @@ xorriso -osirrox on -indev "$source_iso" -extract /md5sum.txt "$scratch/md5sum.t
 unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
 rm -f -- "$scratch/base.squashfs"
 bash "$repo/distro/packaging/build-debs.sh" "$scratch/debs"
-dpkg --root="$scratch/rootfs" -i "$scratch"/debs/*.deb
+mkdir -p "$scratch/rootfs/tmp/cachuntu-debs"
+cp "$scratch"/debs/*.deb "$scratch/rootfs/tmp/cachuntu-debs/"
+chroot "$scratch/rootfs" /bin/sh -c "dpkg -i /tmp/cachuntu-debs/*.deb"
+rm -f -- "$scratch/rootfs/tmp/cachuntu-debs/"*.deb
+rmdir "$scratch/rootfs/tmp/cachuntu-debs"
+curl --fail --location --retry 3 --output "$scratch/$PORTAL_DEB" "$PORTAL_URL"
+printf '%s  %s\n' "$PORTAL_SHA256" "$scratch/$PORTAL_DEB" | sha256sum -c -
+cp "$scratch/$PORTAL_DEB" "$scratch/rootfs/tmp/"
+chroot "$scratch/rootfs" dpkg -i "/tmp/$PORTAL_DEB"
+rm -f -- "$scratch/rootfs/tmp/$PORTAL_DEB"
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
 mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp xz -b 1M -processors 4 -mkfs-time 1780000000
 python3 "$repo/distro/update-md5sums.py" "$scratch/md5sum.txt" "$scratch/filesystem.squashfs"
