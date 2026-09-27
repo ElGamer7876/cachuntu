@@ -1,10 +1,5 @@
-# Marcas
+# Trademarks
 
-El nombre **Cachuntu** y sus identificadores de marca pertenecen al proyecto
-Cachuntu. Las licencias del código y de los recursos creativos no conceden
-permiso para presentarse como una versión oficial, patrocinada o aprobada por
-el proyecto.
+The **Cachuntu** name and brand identifiers belong to the Cachuntu project. The code and creative licenses do not grant permission to present another product as an official version or as sponsored or endorsed by the project.
 
-Cachuntu no está afiliado, patrocinado ni aprobado por Canonical Ltd. Ubuntu es
-una marca registrada de Canonical Ltd. Linux es una marca registrada de Linus
-Torvalds.
+Cachuntu is not affiliated with, sponsored by, or endorsed by Canonical Ltd. Ubuntu is a trademark of Canonical Ltd. Linux is a trademark of Linus Torvalds.

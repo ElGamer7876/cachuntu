@@ -1,54 +1,34 @@
 # Cachuntu
 
-**Ubuntu, pero más rápido, limpio y listo desde el primer arranque.**
+**An Ubuntu based desktop distribution focused on performance and a clear first run experience.**
 
-Cachuntu es una distribución Linux basada en Ubuntu que se está creando desde
-cero con el objetivo de ofrecer buen rendimiento, una experiencia cuidada y
-una selección útil de paquetes y configuraciones.
+Cachuntu is an independent Linux distribution project based on Ubuntu. The first engineering target is a reproducible, installable amd64 preview.
 
 > [!IMPORTANT]
-> Cachuntu se encuentra en una fase inicial. Todavía no existe una ISO, una
-> build instalable, un número de versión ni una fecha de lanzamiento.
+> Cachuntu 0.1 is under development. The build pipeline has not yet passed live boot and installation tests. Do not treat an unverified build as a public release.
 
-## Estado actual
+## Current status
 
-- Concepto e identidad inicial definidos.
-- Repositorio y licencias abiertos.
-- Construcción del sistema base apenas iniciada.
-- Primera ISO booteable pendiente.
+- Ubuntu 26.04 LTS is the stable base for `lts/26.04`.
+- KDE Plasma is the default desktop. The installer also offers GNOME.
+- Gaming, multimedia, and development packages are optional installer choices.
+- The first preview ISO and virtual machine installation are being validated on `lts/26.04`.
 
-El contenido disponible actualmente corresponde principalmente a la identidad,
-la documentación y la planificación. No representa todavía una distribución
-funcional.
+See the [roadmap](docs/ROADMAP.md). Engineering work for the Ubuntu 26.04 LTS preview lives on the `lts/26.04` branch.
 
-## Roadmap
+## License
 
-Consulta [`docs/ROADMAP.md`](docs/ROADMAP.md) para ver las fases previstas. El
-próximo objetivo técnico es construir una primera ISO booteable; no se publicará
-una descarga hasta que exista y pueda probarse.
+- Original code, scripts, and tools: **GPL-3.0-or-later**.
+- Original documentation, text, and visual resources: **CC-BY-SA-4.0**.
+- External components retain their own licenses. See [third party notices](THIRD_PARTY_NOTICES.md).
+- See [trademark policy](TRADEMARKS.md) for the Cachuntu name.
 
-## Licencias
+The GPLv3 text is in [LICENSE](LICENSE). The CC BY-SA 4.0 notice and legal code link are in [LICENSES/CC-BY-SA-4.0.txt](LICENSES/CC-BY-SA-4.0.txt).
 
-- Código propio, scripts y herramientas: **GPL-3.0-or-later**.
-- Documentación, textos y recursos visuales propios: **CC-BY-SA-4.0**.
-- Marca Cachuntu: consulta [`TRADEMARKS.md`](TRADEMARKS.md).
-- Componentes externos: conservan sus licencias originales; consulta
-  [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+## Contributions
 
-El texto completo de GPLv3 está en [`LICENSE`](LICENSE). El aviso y enlace al
-código legal de CC BY-SA 4.0 están en
-[`LICENSES/CC-BY-SA-4.0.txt`](LICENSES/CC-BY-SA-4.0.txt).
+Please distinguish implemented features from plans when reporting issues. Build and test procedures are documented before accepting changes to the distribution base.
 
-## Contribuciones
+## Affiliation
 
-El proceso formal de contribución todavía está en preparación. Antes de aceptar
-cambios al futuro sistema base se documentarán el método de construcción, los
-criterios de paquetes y las pruebas mínimas.
-
-Mientras tanto, los reportes sobre la documentación deben distinguir
-claramente entre funciones implementadas, ideas y decisiones aún no tomadas.
-
-## Marcas y afiliación
-
-Cachuntu es un proyecto independiente. No está afiliado, patrocinado ni
-aprobado por Canonical Ltd. Ubuntu es una marca registrada de Canonical Ltd.
+Cachuntu is independent and is not affiliated with, sponsored by, or endorsed by Canonical Ltd. Ubuntu is a trademark of Canonical Ltd.

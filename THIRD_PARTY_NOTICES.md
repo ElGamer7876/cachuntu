@@ -1,9 +1,5 @@
-# Componentes de terceros
+# Third party notices
 
-Este repositorio contiene actualmente la presentación y la planificación inicial de
-Cachuntu. Las dependencias de la interfaz y cualquier componente externo conservan
-sus respectivas licencias y avisos de copyright.
+Cachuntu includes components inherited from Ubuntu, Debian, the Linux kernel, and other projects. Each component retains its own license and copyright notices. Cachuntu does not relicense third party components.
 
-Cuando comience la construcción del sistema base, cada paquete heredado de
-Ubuntu, Debian, el kernel Linux u otro proyecto mantendrá su licencia original.
-Cachuntu no intenta relicenciar componentes de terceros.
+The website and build scripts also use external dependencies under their respective licenses. Consult package metadata and the installed system for the complete notices applicable to a particular build.
