@@ -18,6 +18,7 @@ echo "Cachuntu $CACHUNTU_VERSION build from $BASE_ISO"
 echo "Scratch: $scratch"
 xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$scratch/base.squashfs"
 unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
+rm -f -- "$scratch/base.squashfs"
 bash "$repo/distro/packaging/build-debs.sh" "$scratch/debs"
 dpkg --root="$scratch/rootfs" -i "$scratch"/debs/*.deb
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
