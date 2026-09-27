@@ -1,20 +1,13 @@
-# Versiones y soporte de Cachuntu
+# Cachuntu releases and support
 
-La edición normal usa `año.mes.día`, por ejemplo `26.9.27`. Se revisa
-diariamente a las 15:00, hora de Ciudad de México. Se publica una versión
-nueva solo cuando haya cambios verificados.
+The regular edition uses `year.month.day`, for example `26.9.27`. It is reviewed daily at 15:00 in Mexico City. Publish a new build only when verified changes warrant one.
 
-La edición LTS tiene una build programada cada 1 de abril y usa
-`año.04.parche`: `27.04.1` sería la primera build de 2027. Un parche
-urgente de esa edición incrementa el último número. Cada edición LTS recibe
-hasta cinco años de soporte Cachuntu, sujeto al soporte de su base Ubuntu.
-Una etiqueta anual nueva no obliga a cambiar la base Ubuntu.
+Schedule an LTS build every April 1. LTS versions use `year.04.patch`: `27.04.1` is the first 2027 build, and urgent fixes increment the final number. Each Cachuntu LTS edition targets five years of support, subject to the support available for its Ubuntu base and the project's ability to maintain desktop packages. A new annual Cachuntu tag does not require a new Ubuntu base.
 
-`lts/26.04` usa repositorios de Ubuntu 26.04 LTS. `canary/26.10`
-prueba Ubuntu 26.10 por separado, sin suministrar paquetes a LTS.
-`main` conserva la web y documentación común.
+`lts/26.04` uses Ubuntu 26.04 LTS repositories. `canary/26.10` tests Ubuntu 26.10 separately and never supplies packages to LTS. `main` contains the website and shared documentation.
 
-La preview usa la ISO oficial Kubuntu 26.04.1 para iniciar con KDE Plasma y
-Calamares. GNOME será una opción de instalación. Los grupos opcionales son
-Gaming, multimedia y desarrollo; requieren conectividad si sus paquetes no
-están en la ISO.
+The preview starts from the official Kubuntu 26.04.1 ISO, providing KDE Plasma and Calamares. GNOME is an installation option. Optional package groups cover gaming, multimedia, and development. An internet connection is required for selected packages that are absent from the ISO.
+
+## Release gate
+
+A release requires verified source and output checksums, live boot, installation to a virtual disk, a boot of the installed system, and postinstallation upgrade checks. Record any untested hardware paths such as Secure Boot, DKMS, or NVIDIA in the release notes.

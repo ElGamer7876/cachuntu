@@ -1,27 +1,16 @@
-# Sistema base de Cachuntu
+# Cachuntu distribution build
 
-Preview 0.1: base Ubuntu 26.04.1 amd64 mediante la ISO oficial Kubuntu para
-KDE Plasma y Calamares. `distro/release.env` fija URL y SHA256 de la
-fuente. El flujo instala tres metapaquetes propios en el sistema live que
-Calamares copia al sistema instalado.
+Cachuntu 0.1 preview uses Ubuntu 26.04.1 amd64 through the official Kubuntu ISO, which supplies KDE Plasma and Calamares. `distro/release.env` pins the source URL and SHA256. The build installs three Cachuntu metapackages in the live filesystem for Calamares to copy to the installed system.
 
-El instalador ofrece KDE Plasma (predeterminado), GNOME y grupos opcionales
-Gaming, multimedia y desarrollo. GNOME agrega paquetes y lo hace el
-escritorio de inicio; Plasma sigue disponible. Las opciones adicionales
-necesitan Internet durante la instalación. El preset mínimo de Kubuntu se
-adapta para quitar su `apt-get -y autoremove` automático.
+The installer offers KDE Plasma by default and GNOME as an alternative. Optional package groups cover gaming, multimedia, and development. Installing additional packages requires internet access. The Kubuntu minimal preset is adjusted to remove its automatic `apt-get -y autoremove` step.
 
-En un Ubuntu Linux con espacio suficiente y permisos de root:
+On an Ubuntu Linux host with sufficient space and root access:
 
 ```bash
 sudo bash distro/prepare-workdir.sh /mnt/e/Cachuntu-build/work.ext4 /mnt/cachuntu-work
 sudo bash distro/build-iso.sh /mnt/e/Cachuntu-build/kubuntu-26.04.1-desktop-amd64.iso /mnt/e/Cachuntu-build/cachuntu-26.9.27-preview-amd64.iso /mnt/cachuntu-work
 ```
 
-Requisitos: `xorriso`, `squashfs-tools`, `python3-yaml`, `dpkg-dev`.
-Los scripts verifican la fuente antes de escribir. El segundo script se niega
-a sobrescribir una ISO existente. El área temporal requiere ext4 y queda
-conservada para diagnósticos. No se usa una partición ni un bootloader del host.
+Requirements: `xorriso`, `squashfs-tools`, `python3-yaml`, and `dpkg-dev`. The scripts verify the source before writing and refuse to overwrite an existing output ISO. The scratch area must use ext4 and is retained for diagnostics. No host partition or bootloader is used.
 
-Estado: la construcción y la instalación en QEMU/KVM se deben validar
-antes de anunciar una ISO pública. Véase `distro/qa/TEST_PLAN.md`.
+The ISO build and QEMU/KVM installation must pass [the test plan](qa/TEST_PLAN.md) before announcing a public release.
