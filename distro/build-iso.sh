@@ -17,13 +17,15 @@ scratch=$(mktemp -d "$workdir/cachuntu.XXXXXXXX")
 echo "Cachuntu $CACHUNTU_VERSION build from $BASE_ISO"
 echo "Scratch: $scratch"
 xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$scratch/base.squashfs"
+xorriso -osirrox on -indev "$source_iso" -extract /md5sum.txt "$scratch/md5sum.txt"
 unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
 rm -f -- "$scratch/base.squashfs"
 bash "$repo/distro/packaging/build-debs.sh" "$scratch/debs"
 dpkg --root="$scratch/rootfs" -i "$scratch"/debs/*.deb
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
 mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp xz -b 1M -processors 4 -mkfs-time 1780000000
-xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -boot_image any replay -commit
+python3 "$repo/distro/update-md5sums.py" "$scratch/md5sum.txt" "$scratch/filesystem.squashfs"
+xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -map "$scratch/md5sum.txt" /md5sum.txt -boot_image any replay -commit
 xorriso -indev "$output_iso" -ls /casper
 sha256sum "$output_iso" | tee "${output_iso}.sha256"
 echo "Build finished; retain scratch until QA passes: $scratch"
