@@ -15,7 +15,7 @@ systemctl --failed --no-pager
 simulation=$(apt-get -s autoremove 2>&1) || { printf '%s\n' "$simulation"; exit 1; }
 printf '%s\n' "$simulation"
 if printf '%s\n' "$simulation" | grep -Eq '^Remv (linux-(generic|image|headers)|amd64-microcode|intel-microcode|linux-firmware|cachuntu-defaults)'; then
-  printf 'FAIL: autoremove propone quitar componentes esenciales\n' >&2
+  printf 'FAIL: autoremove would remove essential components\n' >&2
   failed=1
 fi
 dpkg-query -W xdg-desktop-portal xdg-desktop-portal-kde pipewire wireplumber 2>&1 || failed=1
