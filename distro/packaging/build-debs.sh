@@ -20,6 +20,11 @@ Depends: $depends
 Description: $description
 EOF
   printf 'Cachuntu %s preview\n' "$CACHUNTU_VERSION" >"$stage/usr/share/doc/$name/README"
+  if [[ "$name" == cachuntu-branding ]]; then
+    mkdir -p "$stage/usr/lib/cachuntu"
+    cp "$repo/distro/packaging/select-font.sh" "$stage/usr/lib/cachuntu/select-font"
+    chmod 0755 "$stage/usr/lib/cachuntu/select-font"
+  fi
   if [[ "$name" == cachuntu-defaults ]]; then
     mkdir -p "$stage/usr/lib/cachuntu"
     cp "$repo/distro/qa/post-install.sh" "$stage/usr/lib/cachuntu/post-install-qa"
@@ -29,6 +34,6 @@ EOF
   rm -rf -- "$stage"
 }
 build_one cachuntu-defaults 'plasma-desktop, sddm, linux-generic, linux-firmware, network-manager, pipewire, wireplumber, xdg-desktop-portal, xdg-desktop-portal-kde' 'Cachuntu KDE desktop and Ubuntu hardware update anchors'
-build_one cachuntu-branding 'cachuntu-defaults' 'Cachuntu preview identity metadata'
+build_one cachuntu-branding 'cachuntu-defaults, fonts-inter' 'Cachuntu preview identity metadata'
 build_one cachuntu-performance 'cachuntu-defaults' 'Cachuntu performance profile placeholder with safe Ubuntu defaults'
 sha256sum "$out"/*.deb >"$out/SHA256SUMS"

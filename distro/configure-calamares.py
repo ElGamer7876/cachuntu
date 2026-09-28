@@ -18,14 +18,18 @@ def instance(module, ident, config):
         instances.append(entry)
 instance("packagechooser", "desktop", "cachuntu-desktop.conf")
 instance("packagechooser", "optional", "cachuntu-optional.conf")
+instance("packagechooser", "font", "cachuntu-font.conf")
+instance("contextualprocess", "cachuntu_font_action", "cachuntu-font-action.conf")
 instance("contextualprocess", "cachuntu_desktop_action", "cachuntu-desktop-action.conf")
 show = settings["sequence"][0]["show"]
-for item in ("packagechooser@desktop", "packagechooser@optional"):
+for item in ("packagechooser@desktop", "packagechooser@font", "packagechooser@optional"):
     if item not in show:
         show.insert(show.index("partition"), item)
 run = settings["sequence"][1]["exec"]
 if "contextualprocess@cachuntu_desktop_action" not in run:
     run.insert(run.index("contextualprocess@pkgselect_action") + 1, "contextualprocess@cachuntu_desktop_action")
+if "contextualprocess@cachuntu_font_action" not in run:
+    run.insert(run.index("contextualprocess@cachuntu_desktop_action") + 1, "contextualprocess@cachuntu_font_action")
 settings_path.write_text(yaml.safe_dump(settings, sort_keys=False, allow_unicode=True))
 modules = cal / "modules"
 desktop = {
@@ -41,6 +45,27 @@ desktop = {
          "description[es]": "Escritorio sencillo. Añade GNOME y selecciona GDM; Plasma sigue disponible.",
          "screenshot": "/etc/calamares/branding/kubuntu/welcome.png"},
     ],
+}
+font = {
+    "mode": "required", "method": "legacy", "default": "cachuntu",
+    "labels": {"step": "Font", "step[es]": "Tipografia"},
+    "items": [
+        {"id": "cachuntu", "name": "Cachuntu style (Inter)",
+         "description": "Default preview font. TT Interphases needs a redistribution license.",
+         "description[es]": "Fuente libre de la preview. TT Interphases requiere licencia de redistribucion.",
+         "screenshot": "/etc/calamares/branding/kubuntu/welcome.png"},
+        {"id": "desktop", "name": "Desktop default",
+         "description": "Use the font selected by KDE Plasma or GNOME.",
+         "description[es]": "Usar la fuente predeterminada de KDE Plasma o GNOME.",
+         "screenshot": "/etc/calamares/branding/kubuntu/welcome.png"},
+    ],
+}
+font_action = {
+    "dontChroot": False, "timeout": 1200,
+    "packagechooser_font": {
+        "cachuntu": ["/usr/lib/cachuntu/select-font cachuntu"],
+        "desktop": ["/usr/lib/cachuntu/select-font desktop"],
+    },
 }
 optional = {
     "mode": "optionalmultiple", "method": "packages",
@@ -76,6 +101,8 @@ action = {
 }
 for filename, data in (
     ("cachuntu-desktop.conf", desktop),
+    ("cachuntu-font.conf", font),
+    ("cachuntu-font-action.conf", font_action),
     ("cachuntu-optional.conf", optional),
     ("cachuntu-desktop-action.conf", action),
 ):
@@ -87,3 +114,9 @@ old = preset.read_text()
 needle = '        - "apt-get -y autoremove"\n'
 assert needle in old, "upstream pkgselect config changed; review before building"
 preset.write_text(old.replace(needle, ""))
+# Prefer Btrfs for new installs while preserving the base installer choices.
+partition_path = modules / "partition.conf"
+partition = partition_path.read_text()
+assert "defaultFileSystemType: \"ext4\"" in partition
+assert "availableFileSystemTypes: [\"ext4\",\"btrfs\",\"xfs\"]" in partition
+partition_path.write_text(partition.replace("defaultFileSystemType: \"ext4\"", "defaultFileSystemType: \"btrfs\"").replace("kubuntu_2604", "cachuntu_2604"))

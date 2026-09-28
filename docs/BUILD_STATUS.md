@@ -1,23 +1,20 @@
 # Cachuntu 0.1 build status
 
-Status: **blocked before remastering**. No Cachuntu ISO has been produced or published.
+Status: **live ISO built and UEFI boot verified; installation remains unverified**.
 
-The official Kubuntu 26.04.1 amd64 source ISO was downloaded and independently verified against the pinned SHA256 `831e4d4bb85098339ba43d3502cd6619b27e76daf37246a084cd68a6413090b8` using Windows and WSL. A second checksum read inside the build script failed with an input/output error when the external work drive disconnected. Windows reported disk controller errors. The drive reappeared, but it was reported hot; avoid further large reads or writes until stable storage is available.
+The preview ISO is based on the official Kubuntu 26.04.1 amd64 image, verified against SHA256 `831e4d4bb85098339ba43d3502cd6619b27e76daf37246a084cd68a6413090b8`. It retains Ubuntu 26.04 repositories. The remaster includes the three Cachuntu metapackages, KDE and GNOME installer choices, optional gaming/multimedia/development groups, the Ubuntu portal security fix, and removal of the automatic installer `apt autoremove` step.
 
-Completed checks:
+The built ISO is `outputs/cachuntu-26.9.27-preview-amd64.iso`, SHA256 `9925424e08ef9f092c74436d728e10cbdfdd7a6cf51506abec671346c3de82be`. This checksum applies to the current ISO, not to later source changes. It booted in QEMU with UEFI/OVMF, reached the live desktop, and opened Calamares. A Btrfs install to a disposable QCOW2 reached 32% before the C: drive ran out of space. The VM was stopped and the disposable QCOW2 removed. No installed-system boot, upgrade, BIOS boot, or Secure Boot result is available yet.
 
-- Distribution shell scripts pass `bash -n`.
-- The Calamares configuration script passes Python compilation and a dry run against the Kubuntu settings package.
-- The three Cachuntu metapackages build as Debian packages.
-- Markdown and release notes use English by default.
+The external E: drive returned an input/output error and disappeared while creating a QCOW2. Do not use it for build or test files until its stability is established. The ISO and its checksum remain on C:. No physical disk or host bootloader was touched.
 
-Pending release gates:
+Changes after this ISO was produced: the source now selects Btrfs by default and provides an Inter font choice as a freely redistributable preview substitute for TT Interphases. These changes require a new ISO and validation. TT Interphases must not be bundled without a redistribution license.
 
-1. Build and SHA256 verify the Cachuntu ISO on stable storage.
-2. Boot the live system in UEFI and BIOS.
-3. Install to a QCOW2 virtual disk and boot without the ISO.
-4. Upgrade the installed system and run postinstallation QA.
-5. Test GNOME, optional package groups, portals, and applicable Secure Boot/DKMS/NVIDIA paths.
+Release gates still open:
 
-The build must not be announced as functional until these gates pass.
+1. Build a new ISO with the Btrfs and font changes on stable storage and verify its checksum.
+2. Boot the new ISO with UEFI and BIOS, then install to QCOW2 and boot the installed system without the ISO.
+3. Run postinstallation QA, Ubuntu package upgrade, and portal/desktop/optional package tests.
+4. Exercise Secure Boot, DKMS, NVIDIA, and Dracut only where hardware and virtual firmware support meaningful tests.
 
+The current ISO is an early live preview, not a validated installable release.

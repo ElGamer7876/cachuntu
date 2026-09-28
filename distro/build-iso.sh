@@ -20,6 +20,11 @@ xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$
 xorriso -osirrox on -indev "$source_iso" -extract /md5sum.txt "$scratch/md5sum.txt"
 unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
 rm -f -- "$scratch/base.squashfs"
+curl --fail --location --retry 3 --output "$scratch/$INTER_DEB" "$INTER_URL"
+printf '%s  %s\n' "$INTER_SHA256" "$scratch/$INTER_DEB" | sha256sum -c -
+cp "$scratch/$INTER_DEB" "$scratch/rootfs/tmp/"
+chroot "$scratch/rootfs" dpkg -i "/tmp/$INTER_DEB"
+rm -f -- "$scratch/rootfs/tmp/$INTER_DEB"
 bash "$repo/distro/packaging/build-debs.sh" "$scratch/debs"
 mkdir -p "$scratch/rootfs/tmp/cachuntu-debs"
 cp "$scratch"/debs/*.deb "$scratch/rootfs/tmp/cachuntu-debs/"
