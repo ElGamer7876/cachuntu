@@ -22,9 +22,12 @@ instance("packagechooser", "font", "cachuntu-font.conf")
 instance("contextualprocess", "cachuntu_font_action", "cachuntu-font-action.conf")
 instance("contextualprocess", "cachuntu_desktop_action", "cachuntu-desktop-action.conf")
 show = settings["sequence"][0]["show"]
-for item in ("packagechooser@desktop", "packagechooser@font", "packagechooser@optional"):
-    if item not in show:
-        show.insert(show.index("partition"), item)
+chooser_steps = ("packagechooser@desktop", "packagechooser@font", "packagechooser@optional")
+for item in chooser_steps:
+    if item in show:
+        show.remove(item)
+for item in chooser_steps:
+    show.insert(show.index("partition"), item)
 run = settings["sequence"][1]["exec"]
 if "contextualprocess@cachuntu_desktop_action" not in run:
     run.insert(run.index("contextualprocess@pkgselect_action") + 1, "contextualprocess@cachuntu_desktop_action")
@@ -112,11 +115,13 @@ for filename, data in (
 preset = modules / "pkgselect_context.conf"
 old = preset.read_text()
 needle = '        - "apt-get -y autoremove"\n'
-assert needle in old, "upstream pkgselect config changed; review before building"
-preset.write_text(old.replace(needle, ""))
+if needle in old:
+    preset.write_text(old.replace(needle, ""))
+elif "apt-get -y autoremove" in old:
+    raise AssertionError("upstream pkgselect config changed; review before building")
 # Prefer Btrfs for new installs while preserving the base installer choices.
 partition_path = modules / "partition.conf"
 partition = partition_path.read_text()
-assert "defaultFileSystemType: \"ext4\"" in partition
 assert "availableFileSystemTypes: [\"ext4\",\"btrfs\",\"xfs\"]" in partition
+assert "defaultFileSystemType: \"ext4\"" in partition or "defaultFileSystemType: \"btrfs\"" in partition
 partition_path.write_text(partition.replace("defaultFileSystemType: \"ext4\"", "defaultFileSystemType: \"btrfs\"").replace("kubuntu_2604", "cachuntu_2604"))
