@@ -3,6 +3,11 @@ set -euo pipefail
 repo=$(cd "$(dirname "$0")/../.." && pwd)
 source "$repo/distro/release.env"
 out="${1:?output directory}"
+if [[ "$CACHUNTU_CHANNEL" == lts ]]; then
+  [[ "$CACHUNTU_VERSION" =~ ^[0-9]{2}\.[0-9]{2}\.[0-9]+$ ]] || { echo "LTS version must be year.month.patch" >&2; exit 2; }
+else
+  [[ "$CACHUNTU_VERSION" =~ ^[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}\.[0-9]+$ ]] || { echo "Preview and regular versions must be year.month.day.patch" >&2; exit 2; }
+fi
 mkdir -p "$out"
 build_one() {
   local name=$1 depends=$2 description=$3

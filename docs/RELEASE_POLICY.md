@@ -1,6 +1,6 @@
 # Cachuntu releases and support
 
-The regular edition uses `year.month.day`, for example `26.9.27`. It is reviewed daily at 15:00 in Mexico City. Publish a new build only when verified changes warrant one.
+The regular edition and previews use `year.month.day.patch`, for example `26.9.28.0`. The patch field starts at `0` for each date and increments for an urgent rebuild on that date. It is reviewed daily at 15:00 in Mexico City. Publish a new build only when verified changes warrant one.
 
 Schedule an LTS build every April 1. LTS versions use `year.04.patch`: `27.04.1` is the first 2027 build, and urgent fixes increment the final number. Each Cachuntu LTS edition targets five years of support, subject to the support available for its Ubuntu base and the project's ability to maintain desktop packages. Ubuntu 26.04 LTS receives standard Ubuntu maintenance through April 2031, while Kubuntu 26.04 desktop maintenance ends in April 2029. Five-year Cachuntu support therefore requires a validated desktop maintenance or upgrade path before the Kubuntu deadline. This is an open release risk, not an established capability. A new annual Cachuntu tag does not require a new Ubuntu base.
 

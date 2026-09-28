@@ -10,7 +10,7 @@ On an Ubuntu Linux host with sufficient space and root access:
 
 ```bash
 sudo bash distro/prepare-workdir.sh /var/tmp/cachuntu-work.ext4 /mnt/cachuntu-work
-sudo bash distro/build-iso.sh /path/to/kubuntu-26.04.1-desktop-amd64.iso /path/to/cachuntu-26.9.27-preview-amd64.iso /mnt/cachuntu-work
+sudo bash distro/build-iso.sh /path/to/kubuntu-26.04.1-desktop-amd64.iso /path/to/cachuntu-26.9.28.0-preview-amd64.iso /mnt/cachuntu-work
 ```
 
 Requirements: `xorriso`, `squashfs-tools`, `python3-yaml`, `dpkg-dev`, and `curl`. The scripts verify the source before writing, install a SHA256-pinned Ubuntu portal security fix, and refuse to overwrite an existing output ISO. The scratch area must use ext4 and is retained for diagnostics. No host partition or bootloader is used.
