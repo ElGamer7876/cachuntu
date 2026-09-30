@@ -1,0 +1,23 @@
+---
+componentName: cachuntu
+windowExpanding: fullscreen
+strings:
+    productName: Cachuntu
+    shortProductName: Cachuntu
+    version: @VERSION@
+    shortVersion: Preview
+    versionedName: Cachuntu @VERSION@ Preview
+    shortVersionedName: Cachuntu Preview
+    bootloaderEntryName: Cachuntu
+    productUrl: https://github.com/ElGamer7876/cachuntu
+    supportUrl: https://github.com/ElGamer7876/cachuntu/issues
+images:
+    productLogo: "logo.png"
+    productIcon: "icon.png"
+    productWelcome: "welcome.png"
+slideshow: "show.qml"
+slideshowAPI: 1
+style:
+    SidebarBackground: "#061326"
+    SidebarText: "#F0F7FF"
+    SidebarTextCurrent: "#4DE4D1"

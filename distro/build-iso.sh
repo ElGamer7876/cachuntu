@@ -18,6 +18,7 @@ echo "Cachuntu $CACHUNTU_VERSION build from $BASE_ISO"
 echo "Scratch: $scratch"
 xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$scratch/base.squashfs"
 xorriso -osirrox on -indev "$source_iso" -extract /md5sum.txt "$scratch/md5sum.txt"
+xorriso -osirrox on -indev "$source_iso" -extract /boot/grub/grub.cfg "$scratch/grub.cfg"
 unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
 rm -f -- "$scratch/base.squashfs"
 curl --fail --location --retry 3 --output "$scratch/$INTER_DEB" "$INTER_URL"
@@ -37,9 +38,13 @@ cp "$scratch/$PORTAL_DEB" "$scratch/rootfs/tmp/"
 chroot "$scratch/rootfs" dpkg -i "/tmp/$PORTAL_DEB"
 rm -f -- "$scratch/rootfs/tmp/$PORTAL_DEB"
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
+python3 "$repo/distro/brand-live.py" "$scratch/rootfs"
+python3 "$repo/distro/brand-grub.py" "$scratch/grub.cfg"
+chroot "$scratch/rootfs" /usr/bin/python3 -c 'from PyQt6.QtWidgets import QApplication'
+python3 "$repo/distro/qa/check-branding.py" "$scratch/rootfs" "$scratch/grub.cfg"
 mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp xz -b 1M -processors 4 -mkfs-time 1780000000
 python3 "$repo/distro/update-md5sums.py" "$scratch/md5sum.txt" "$scratch/filesystem.squashfs"
-xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -map "$scratch/md5sum.txt" /md5sum.txt -boot_image any replay -commit
+xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -map "$scratch/md5sum.txt" /md5sum.txt -map "$scratch/grub.cfg" /boot/grub/grub.cfg -volid "CACHUNTU_${CACHUNTU_VERSION//./_}" -boot_image any replay -commit
 xorriso -indev "$output_iso" -ls /casper
 sha256sum "$output_iso" | tee "${output_iso}.sha256"
 echo "Build finished; retain scratch until QA passes: $scratch"
