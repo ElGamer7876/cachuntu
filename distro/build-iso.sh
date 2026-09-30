@@ -42,7 +42,7 @@ python3 "$repo/distro/brand-live.py" "$scratch/rootfs"
 python3 "$repo/distro/brand-grub.py" "$scratch/grub.cfg"
 chroot "$scratch/rootfs" /usr/bin/python3 -c 'from PyQt6.QtWidgets import QApplication'
 python3 "$repo/distro/qa/check-branding.py" "$scratch/rootfs" "$scratch/grub.cfg"
-mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp xz -b 1M -processors 4 -mkfs-time 1780000000
+mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 9 -b 1M -processors 2 -mem 512M -mkfs-time 1780000000
 python3 "$repo/distro/update-md5sums.py" "$scratch/md5sum.txt" "$scratch/filesystem.squashfs"
 xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -map "$scratch/md5sum.txt" /md5sum.txt -map "$scratch/grub.cfg" /boot/grub/grub.cfg -volid "CACHUNTU_${CACHUNTU_VERSION//./_}" -boot_image any replay -commit
 xorriso -indev "$output_iso" -ls /casper
