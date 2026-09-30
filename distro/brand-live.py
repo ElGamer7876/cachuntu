@@ -30,11 +30,13 @@ for config in (cal / "modules").glob("cachuntu-*.conf"):
     config.write_text(text.replace("/branding/kubuntu/welcome.png", "/branding/cachuntu/welcome.png"))
 
 shutil.copyfile(assets / "cachuntu-logo.png", root / "usr/share/pixmaps/cachuntu-logo.png")
-shutil.copyfile(assets / "welcome.py", root / "usr/libexec/cachuntu-welcome.py")
+welcome = root / "usr/libexec/cachuntu-welcome.py"
+shutil.copyfile(assets / "welcome.py", welcome)
+welcome.chmod(0o755)
 start = root / "usr/libexec/start-kubuntu-live-env"
 script = start.read_text().replace("Starts the Kubuntu Live Environment.", "Starts the Cachuntu Live Environment.")
 assert "kubuntu-installer-prompt" in script or "/usr/libexec/cachuntu-welcome.py" in script
-start.write_text(script.replace("kubuntu-installer-prompt", "/usr/bin/python3 /usr/libexec/cachuntu-welcome.py"))
+start.write_text(script.replace("kubuntu-installer-prompt", "/usr/libexec/cachuntu-welcome.py"))
 
 desktop = root / "usr/share/applications/kubuntu-calamares.desktop"
 text = desktop.read_text().replace("Kubuntu", "Cachuntu").replace("kubuntu", "Cachuntu")

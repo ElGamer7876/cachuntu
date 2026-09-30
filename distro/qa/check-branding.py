@@ -14,7 +14,10 @@ assert (brand / "logo.png").is_file()
 assert "productName: Cachuntu" in (brand / "branding.desc").read_text()
 assert "Kubuntu" not in (brand / "show.qml").read_text()
 assert "Install Cachuntu" in (root / "usr/libexec/cachuntu-welcome.py").read_text()
-assert "kubuntu-installer-prompt" not in (root / "usr/libexec/start-kubuntu-live-env").read_text()
+assert (root / "usr/libexec/cachuntu-welcome.py").stat().st_mode & 0o111
+live_start = (root / "usr/libexec/start-kubuntu-live-env").read_text()
+assert "kubuntu-installer-prompt" not in live_start
+assert "kwin_wayland --xwayland --no-lockscreen /usr/libexec/cachuntu-welcome.py" in live_start
 assert "Name=Install Cachuntu" in (root / "usr/share/applications/kubuntu-calamares.desktop").read_text()
 assert "Name=Cachuntu" in (root / "etc/xdg/kcm-about-distrorc").read_text()
 assert "Current=cachuntu" in (root / "etc/sddm.conf.d/20-kubuntu.conf").read_text()
