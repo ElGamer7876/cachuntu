@@ -6,4 +6,6 @@ The palette uses a deep navy background (`#061326`), turquoise accent (`#4DE4D1`
 
 The board is a design reference, not a set of executable installer screens. Calamares still owns its form controls and accessibility behavior. The source distribution and package repositories remain Ubuntu 26.04 LTS; the build input is the official Kubuntu 26.04.1 image. Internal upstream package names and source attribution should not be rewritten.
 
+The live GRUB entries omit Plymouth's `splash` option because the inherited live initrd still contains Kubuntu splash art. A dedicated Cachuntu Plymouth theme and rebuilt initrd are pending.
+
 Inter is the preview typeface. TT Interphases remains excluded until redistribution rights for an ISO are established. The installed user may select the desktop's default font instead.

@@ -21,4 +21,5 @@ assert "Current=cachuntu" in (root / "etc/sddm.conf.d/20-kubuntu.conf").read_tex
 assert (root / "usr/share/sddm/themes/cachuntu/theme.conf").is_file()
 assert "Try or Install Cachuntu" in grub.read_text()
 assert "Try or Install Kubuntu" not in grub.read_text()
+assert " quiet splash" not in grub.read_text()
 print("Visible installer and boot branding: OK")
