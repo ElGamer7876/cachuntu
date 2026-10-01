@@ -9,3 +9,11 @@ The board is a design reference, not a set of executable installer screens. Cala
 The live GRUB entries omit Plymouth's `splash` option because the inherited live initrd still contains Kubuntu splash art. A dedicated Cachuntu Plymouth theme and rebuilt initrd are pending.
 
 Inter is the preview typeface. TT Interphases remains excluded until redistribution rights for an ISO are established. The installed user may select the desktop's default font instead.
+
+## Wallpaper format — 26.10.1.2
+
+The desktop build also rasterizes its existing approved-logo SVG into PNG,
+using the base image's Qt renderer, and points the new-user Plasma layout to
+the PNG. This avoids depending on wallpaper selection accepting an SVG. The
+PNG dimensions and layout reference are build gates; runtime activation is
+still pending and is not inferred from a successful D-Bus response.

@@ -3,6 +3,7 @@ import base64
 import json
 from pathlib import Path
 import shutil
+import subprocess
 
 def apply(root: Path, assets: Path):
     wallpaper = root / 'usr/share/wallpapers/Cachuntu'
@@ -16,6 +17,19 @@ def apply(root: Path, assets: Path):
 <image x="730" y="245" width="460" height="460" preserveAspectRatio="xMidYMid meet" xlink:href="data:image/png;base64,{logo}"/>
 <text x="960" y="780" fill="#edf8ff" font-family="Inter,sans-serif" font-size="64" text-anchor="middle">Cachuntu</text>
 <text x="960" y="840" fill="#8eb6cc" font-family="Inter,sans-serif" font-size="24" text-anchor="middle">Ubuntu foundation · Your desktop, your choice</text></svg>''')
+    # Plasma image selection supports PNG consistently across live/new users.
+    # Rasterize the existing vector artwork with Qt's installed SVG image plugin.
+    renderer = """from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QImage
+app = QApplication([])
+image = QImage('/usr/share/wallpapers/Cachuntu/contents/images/1920x1080.svg')
+if image.isNull() or image.size().width() != 1920 or image.size().height() != 1080:
+    raise SystemExit('Invalid Cachuntu wallpaper render')
+if not image.save('/usr/share/wallpapers/Cachuntu/contents/images/1920x1080.png'):
+    raise SystemExit('Could not save Cachuntu wallpaper')
+"""
+    subprocess.run(['chroot', str(root), 'env', 'QT_QPA_PLATFORM=offscreen',
+                    '/usr/bin/python3', '-c', renderer], check=True)
     (wallpaper / 'metadata.json').write_text(json.dumps({'KPlugin': {'Id': 'Cachuntu', 'Name': 'Cachuntu', 'Authors': [{'Name': 'Cachuntu Project'}]}}))
     themes = root / 'usr/share/plasma/look-and-feel'
     theme = themes / 'org.cachuntu.desktop'
@@ -27,7 +41,7 @@ def apply(root: Path, assets: Path):
     defaults = theme / 'contents/defaults'
     defaults.write_text(defaults.read_text().replace('ColorScheme=BreezeLight', 'ColorScheme=BreezeDark').replace('name=kubuntu', 'name=breeze-dark').replace('Image=Kubuntu', 'Image=Cachuntu'))
     layout = theme / 'contents/layouts/org.kde.plasma.desktop-layout.js'
-    layout.write_text(layout.read_text().replace('file:///usr/share/wallpapers/Kubuntu#day-night', 'file:///usr/share/wallpapers/Cachuntu/contents/images/1920x1080.svg').replace("writeConfig( 'DynamicMode', 1 )", "writeConfig( 'DynamicMode', 0 )"))
+    layout.write_text(layout.read_text().replace('file:///usr/share/wallpapers/Kubuntu#day-night', 'file:///usr/share/wallpapers/Cachuntu/contents/images/1920x1080.png').replace("writeConfig( 'DynamicMode', 1 )", "writeConfig( 'DynamicMode', 0 )"))
     # New users inherit the system theme; font selection may add General keys.
     globals_path = root / 'etc/xdg/kdeglobals'
     existing = globals_path.read_text() if globals_path.exists() else ''

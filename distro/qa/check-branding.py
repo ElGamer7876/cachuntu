@@ -33,4 +33,10 @@ theme = root / "usr/share/plasma/look-and-feel/org.cachuntu.desktop"
 assert 'Image=Cachuntu' in (theme / 'contents/defaults').read_text()
 assert 'file:///usr/share/wallpapers/Kubuntu#day-night' not in (theme / 'contents/layouts/org.kde.plasma.desktop-layout.js').read_text()
 assert 'LookAndFeelPackage=org.cachuntu.desktop' in (root / 'etc/xdg/kdeglobals').read_text()
+png = root / 'usr/share/wallpapers/Cachuntu/contents/images/1920x1080.png'
+import struct
+header = png.read_bytes()[:24]
+assert header[:8] == b'\x89PNG\r\n\x1a\n'
+assert struct.unpack('>II', header[16:24]) == (1920, 1080)
+assert 'images/1920x1080.png' in (theme / 'contents/layouts/org.kde.plasma.desktop-layout.js').read_text()
 print("Visible installer and boot branding: OK")

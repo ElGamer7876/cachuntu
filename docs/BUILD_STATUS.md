@@ -1,6 +1,12 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. A subsequent normal boot without the ISO reached Plasma with 4 GiB RAM. Upgrade/reboot validation remains incomplete after E: disappeared and Btrfs reported I/O errors.**
+Updated: 2026-10-01. **26.10.1.2 clean build is in progress. Eight locked
+Resolute security packages are now installed by the builder before its security
+gate. The new Plasma wallpaper layout uses a validated 1920x1080 PNG derived
+from the existing approved-logo SVG. No 26.10.1.2 ISO or runtime pass is claimed
+until the build and VM checks finish.**
+
+Previous validation: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. A subsequent normal boot without the ISO reached Plasma with 4 GiB RAM. Upgrade/reboot validation remains incomplete after E: disappeared and Btrfs reported I/O errors.**
 
 The base remains Kubuntu 26.04.1 amd64, SHA256 `831e4d4bb85098339ba43d3502cd6619b27e76daf37246a084cd68a6413090b8`. Cachuntu `26.10.1.0` is a calendar version. The `lts/26.04` branch uses Ubuntu 26.04 repositories without Ubuntu 26.10 packages.
 
