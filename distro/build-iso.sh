@@ -38,6 +38,7 @@ cp "$scratch/$PORTAL_DEB" "$scratch/rootfs/tmp/"
 chroot "$scratch/rootfs" dpkg -i "/tmp/$PORTAL_DEB"
 rm -f -- "$scratch/rootfs/tmp/$PORTAL_DEB"
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
+python3 "$repo/distro/qa/check-installer-defaults.py" "$scratch/rootfs"
 python3 "$repo/distro/brand-live.py" "$scratch/rootfs"
 python3 "$repo/distro/brand-grub.py" "$scratch/grub.cfg"
 chroot "$scratch/rootfs" /usr/bin/python3 -c 'from PyQt6.QtWidgets import QApplication'

@@ -122,6 +122,6 @@ elif "apt-get -y autoremove" in old:
 # Prefer Btrfs for new installs while preserving the base installer choices.
 partition_path = modules / "partition.conf"
 partition = partition_path.read_text()
-assert "availableFileSystemTypes: [\"ext4\",\"btrfs\",\"xfs\"]" in partition
+assert any(choice in partition for choice in ('availableFileSystemTypes: ["ext4","btrfs","xfs"]', 'availableFileSystemTypes: ["btrfs","ext4","xfs"]'))
 assert "defaultFileSystemType: \"ext4\"" in partition or "defaultFileSystemType: \"btrfs\"" in partition
-partition_path.write_text(partition.replace("defaultFileSystemType: \"ext4\"", "defaultFileSystemType: \"btrfs\"").replace("kubuntu_2604", "cachuntu_2604"))
+partition_path.write_text(partition.replace("defaultFileSystemType: \"ext4\"", "defaultFileSystemType: \"btrfs\"").replace('availableFileSystemTypes: ["ext4","btrfs","xfs"]', 'availableFileSystemTypes: ["btrfs","ext4","xfs"]').replace("kubuntu_2604", "cachuntu_2604"))
