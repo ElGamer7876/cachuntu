@@ -13,3 +13,28 @@ Use a new QCOW2 virtual disk in QEMU/KVM. Never select a physical disk.
 9. Record `uname -r`, `systemctl --failed`, and `journalctl -b -p err` after each Ubuntu kernel update.
 
 The Kubuntu 26.04.1 source ISO uses `initramfs-tools`. Evaluate Dracut only after installation, upgrade, and Secure Boot tests pass in a VM.
+
+## Direct QEMU window (October 1 runner)
+
+Use regular ISO and QCOW2 files. The runner uses KVM, 4 GiB RAM, UEFI,
+virtio networking, an absolute USB tablet and the SDL window. It creates a
+fresh 40 GiB QCOW2 and firmware state when the requested live-test disk does
+not exist. It refuses another running QEMU instance or a non-QCOW2 image.
+No physical disk or host bootloader is exposed. The QA directory is shared
+read-only. The ISO export hash must be verified before starting the VM.
+
+```bash
+sudo bash distro/qa/run-qemu.sh \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 live
+# After guest shutdown and installation, boot without attaching the ISO:
+sudo bash distro/qa/run-qemu.sh \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 installed
+```
+
+The QMP socket is `/tmp/<QCOW2 basename without .qcow2>.qmp.sock`; pass it to
+`qmp-guest.py --socket`. Set `CACHUNTU_QMP_SOCKET` to override it with another
+Unix socket path on a Linux filesystem.
+Use guest keyboard/mouse controls only after confirming the focused guest
+screen. Launching the runner does not prove installation or runtime QA.
