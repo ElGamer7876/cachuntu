@@ -2,7 +2,7 @@
 
 Use a new QCOW2 virtual disk in QEMU/KVM. Never select a physical disk.
 
-1. Verify SHA256 for both the source and Cachuntu ISO.
+1. Verify SHA256 for both the source and Cachuntu ISO. Run `python3 distro/qa/check-iso-checksums.py` before building. Verify the ISO md5sum list against the changed live filesystem and GRUB configuration; keep partial exports separate from release artifacts.
 2. Boot in UEFI and BIOS. Confirm the Cachuntu welcome screen appears instead of a black screen, and verify that mouse clicks and keyboard Enter work. Try Cachuntu must open Plasma; Install Cachuntu must open Calamares. Run bash distro/qa/live-network.sh inside the guest and save its output to capture NetworkManager, routes, and Ubuntu mirror DNS failures. Check PipeWire, file chooser, and desktop portals.
 3. Open Calamares. KDE Plasma and Cachuntu style (Inter) must be selected by default. GNOME, the desktop-default font, and the gaming, multimedia, and development groups must each have a description.
 4. Check that Btrfs is the default filesystem for a new install, with ext4 and XFS still selectable. Install KDE to QCOW2, restart without the ISO, verify `cachuntu-defaults` and `linux-generic`, and run `sudo /usr/lib/cachuntu/post-install-qa`.
