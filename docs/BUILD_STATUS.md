@@ -1,6 +1,6 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.0 ISO assembly is complete. Export verification and VM installation are in progress. Installation remains unvalidated.**
+Updated: 2026-10-01. **26.10.1.0 ISO assembly is complete. The E: export passed SHA256. VM installation is in progress on Btrfs. Installation remains unvalidated.**
 
 The base remains Kubuntu 26.04.1 amd64, SHA256 `831e4d4bb85098339ba43d3502cd6619b27e76daf37246a084cd68a6413090b8`. Cachuntu `26.10.1.0` is a calendar version. The `lts/26.04` branch uses Ubuntu 26.04 repositories without Ubuntu 26.10 packages.
 
@@ -22,14 +22,15 @@ Live network QA returned exit status 0, including NetworkManager, default route,
 - `ee5366f`: shared installer launcher preserving DISPLAY, XAUTHORITY, XDG_RUNTIME_DIR, and WAYLAND_DISPLAY; Return activation on both welcome buttons; real Qt event test in the build gate.
 - `2add71d`: version 26.10.1.0 and refreshed branding version text.
 - `d1fec1f`: refresh the branded GRUB checksum and reject incomplete ISO checksum manifests.
+- `2d1fedb`: align the first filesystem selector entry with the Btrfs default; gate desktop, font, optional-group, and filesystem defaults in future builds. This source change is newer than the exported ISO. The exported installer showed ext4 in the selector while its actual plan and mounted target used Btrfs. A fixture reproduced the old mismatch and passed with the corrected configuration.
 
-All three staged Cachuntu metapackages are `26.10.1.0~preview1`. Branding and Qt keyboard checks passed. A fresh image containing the fixes still needs runtime validation.
+All three staged Cachuntu metapackages are `26.10.1.0~preview1`. Branding and Qt keyboard checks passed. The corrected ISO booted in QEMU/KVM UEFI through the direct SDL window. Return opened Calamares successfully. KDE Plasma and Inter were selected by default, with GNOME, desktop fonts, and all three optional groups present. The installation summary and live `findmnt` confirmed Btrfs on the 40 GiB QCOW2, with `@`, `@home`, and `@swap` subvolumes. Live network QA passed with exit status 0; the guest reported no failed system units at this stage.
 
 ## Build and storage
 
 The corrected export target is `E:\Cachuntu-build\outputs\cachuntu-26.10.1.0-preview2-amd64.iso`.
 
-Local SHA256: `f3f58ac5b2d63acffcccf65c9da4a461b8bf1b4b7732ec78b4bd96d0781f0bd0`. Export verification is pending. Compression had already completed before the attempted memory pause; the earlier status was incorrect. A stale checksum for the branded GRUB configuration was found and fixed without recompressing the filesystem. Extracting GRUB and md5sum.txt from the final local ISO confirmed that their checksums match. The updater now covers every explicitly mapped file and has tests for missing and duplicate entries.
+Local SHA256: `f3f58ac5b2d63acffcccf65c9da4a461b8bf1b4b7732ec78b4bd96d0781f0bd0`. The exported ISO matches this SHA256. Compression had already completed before the attempted memory pause; the earlier status was incorrect. A stale checksum for the branded GRUB configuration was found and fixed without recompressing the filesystem. Extracting GRUB and md5sum.txt from the final local ISO confirmed that their checksums match. The updater now covers every explicitly mapped file and has tests for missing and duplicate entries.
 
 The initial Windows UNC export stalled. It was terminated and its output retained as `cachuntu-26.10.1.0-unc-interrupted.iso.part`; it is not a release artifact. The corrected export uses WSL's E: mount and writes `.part` until the full SHA256 matches. VirtualDJ was closed with permission. Firefox remains open.
 
@@ -41,10 +42,14 @@ Temporary files are reused to limit additional C: allocation. The compression lo
 
 Build logs: `E:\Cachuntu-build\outputs\build-26.10.1.0.log` and WSL `.cache/build/cachuntu.nnioCeKf/build-26.10.1.0.log`. Windows task workspace guest logs: `preview3-network.log`, `preview3-calamares.log`, `preview3-calamares-probe.log`, and `preview3-wayland-session.log`. Screenshots: `vm-preview3.png` and `vm-calamares-probe.png`.
 
-1. Complete the new ISO, export, SHA256, and boot record inspection.
-2. Verify keyboard/mouse, Calamares, Plasma, desktop/font/optional choices, and Btrfs default in the corrected ISO.
+1. ISO assembly, export SHA256, and BIOS/UEFI boot record inspection completed. Runtime BIOS boot is still pending.
+2. UEFI live boot, Return activation, Calamares launch, and default choices verified. QMP keyboard input works with slower typing. Pointer coordinate alignment required diagnosis; clicks selected the virtual disk installation mode. The filesystem selector display mismatch is fixed in source for the next candidate.
 3. Install to QCOW2 and boot without the ISO; run postinstallation QA, Ubuntu upgrade/reboot, autoremove simulation, portals, and PipeWire tests.
 4. Verify BIOS boot, a clean build, and bit-for-bit reproducibility. This rebuild reuses a prepared root filesystem.
 5. Test Secure Boot, DKMS, NVIDIA, and suspend/resume where meaningful. Retain initramfs-tools until a Dracut migration passes installation and upgrade tests.
 
 Inter is the available font choice; TT Interphases redistribution requires a suitable license. See `distro/BRANDING.md` and `distro/qa/TEST_PLAN.md`.
+
+## Current install evidence
+
+The installation is copying the filesystem into `E:\Cachuntu-build\outputs\cachuntu-26.10.1.0-install.qcow2`; it has not completed or booted as an installed system. Evidence in the Windows task workspace: `26.10.1.0-network.log`, `26.10.1.0-calamares.log`, `26.10.1.0-boot-errors.log`, and `26.10.1.0-install-state.log`. `calamares-btrfs-summary-26.10.1.0.png` is saved with the ISO on E:. The VM uses the matching local ISO while the exported copy remains available on E:.
