@@ -3,7 +3,7 @@
 Use a new QCOW2 virtual disk in QEMU/KVM. Never select a physical disk.
 
 1. Verify SHA256 for both the source and Cachuntu ISO.
-2. Boot in UEFI and BIOS. Confirm the Cachuntu welcome screen appears instead of a black screen, and verify that mouse clicks and keyboard Enter work. Try Cachuntu must open Plasma; Install Cachuntu must open Calamares. Check NetworkManager, PipeWire, file chooser, and desktop portals.
+2. Boot in UEFI and BIOS. Confirm the Cachuntu welcome screen appears instead of a black screen, and verify that mouse clicks and keyboard Enter work. Try Cachuntu must open Plasma; Install Cachuntu must open Calamares. Run bash distro/qa/live-network.sh inside the guest and save its output to capture NetworkManager, routes, and Ubuntu mirror DNS failures. Check PipeWire, file chooser, and desktop portals.
 3. Open Calamares. KDE Plasma and Cachuntu style (Inter) must be selected by default. GNOME, the desktop-default font, and the gaming, multimedia, and development groups must each have a description.
 4. Check that Btrfs is the default filesystem for a new install, with ext4 and XFS still selectable. Install KDE to QCOW2, restart without the ISO, verify `cachuntu-defaults` and `linux-generic`, and run `sudo /usr/lib/cachuntu/post-install-qa`.
 5. Check the installed KDE font, and repeat a small install with Desktop default to verify it does not receive the Cachuntu font override. Run `apt update && apt full-upgrade`, restart, and repeat QA. The portal check must report at least `xdg-desktop-portal 1.21.1+ds-1ubuntu3.1`, the Ubuntu 26.04 fix for USN-8287-2. Review `apt-get -s autoremove` before removing anything.
