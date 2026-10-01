@@ -5,14 +5,15 @@ case "${1:-}" in
   cachuntu)
     dpkg-query -W -f='${Status}' fonts-inter | grep -qx 'install ok installed'
     mkdir -p /etc/fonts/conf.d /etc/xdg /etc/dconf/db/local.d /etc/dconf/profile
-    cat >/etc/fonts/conf.d/60-cachuntu-font.conf <<'XML'
+    rm -f -- /etc/fonts/conf.d/60-cachuntu-font.conf
+    cat >/etc/fonts/conf.d/99-cachuntu-font.conf <<'XML'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
-  <alias>
-    <family>sans-serif</family>
-    <prefer><family>Inter</family></prefer>
-  </alias>
+  <match target="pattern">
+    <test name="family" compare="eq"><string>sans-serif</string></test>
+    <edit name="family" mode="prepend" binding="strong"><string>Inter</string></edit>
+  </match>
 </fontconfig>
 XML
     for key in font menuFont toolBarFont; do
