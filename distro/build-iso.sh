@@ -43,6 +43,9 @@ printf '%s  %s\n' "$PORTAL_SHA256" "$scratch/$PORTAL_DEB" | sha256sum -c -
 cp "$scratch/$PORTAL_DEB" "$scratch/rootfs/tmp/"
 chroot "$scratch/rootfs" dpkg -i "/tmp/$PORTAL_DEB"
 rm -f -- "$scratch/rootfs/tmp/$PORTAL_DEB"
+# Refuse to compress/export an image missing reviewed Resolute security fixes.
+python3 "$repo/distro/qa/test-security-baseline.py"
+python3 "$repo/distro/qa/check-security-baseline.py" --root "$scratch/rootfs"
 python3 "$repo/distro/configure-calamares.py" "$scratch/rootfs"
 python3 "$repo/distro/qa/check-installer-defaults.py" "$scratch/rootfs"
 python3 "$repo/distro/brand-live.py" "$scratch/rootfs"

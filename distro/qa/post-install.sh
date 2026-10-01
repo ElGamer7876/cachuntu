@@ -5,6 +5,7 @@ installed() { test "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null)" = 'install
 check() { if "$@"; then printf 'OK %s\n' "$*"; else printf 'FAIL %s\n' "$*" >&2; failed=1; fi; }
 check installed cachuntu-defaults
 check installed linux-generic
+check /usr/lib/cachuntu/check-security-baseline
 check systemctl is-active --quiet NetworkManager
 check systemctl is-active --quiet display-manager
 if command -v dracut >/dev/null; then check command -v dracut; else check command -v update-initramfs; fi
