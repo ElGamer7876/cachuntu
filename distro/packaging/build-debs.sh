@@ -34,11 +34,14 @@ EOF
     mkdir -p "$stage/usr/lib/cachuntu"
     cp "$repo/distro/qa/post-install.sh" "$stage/usr/lib/cachuntu/post-install-qa"
     chmod 0755 "$stage/usr/lib/cachuntu/post-install-qa"
+    mkdir -p "$stage/usr/bin"
+    cp "$repo/distro/assets/windows-migration.py" "$stage/usr/bin/cachuntu-migrate"
+    chmod 0755 "$stage/usr/bin/cachuntu-migrate"
   fi
   SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-1780000000} dpkg-deb --root-owner-group --build "$stage" "$out/${name}_${CACHUNTU_VERSION}~preview1_all.deb" >/dev/null
   rm -rf -- "$stage"
 }
-build_one cachuntu-defaults 'plasma-desktop, sddm, linux-generic, linux-firmware, network-manager, pipewire, wireplumber, xdg-desktop-portal, xdg-desktop-portal-kde' 'Cachuntu KDE desktop and Ubuntu hardware update anchors'
-build_one cachuntu-branding 'cachuntu-defaults, fonts-inter' 'Cachuntu preview identity metadata'
+build_one cachuntu-defaults 'python3, openssh-client, plasma-desktop, sddm, linux-generic, linux-firmware, network-manager, pipewire, wireplumber, xdg-desktop-portal, xdg-desktop-portal-kde' 'Cachuntu KDE desktop and Ubuntu hardware update anchors'
+build_one cachuntu-branding 'cachuntu-defaults, fonts-inter, dconf-cli' 'Cachuntu preview identity metadata'
 build_one cachuntu-performance 'cachuntu-defaults' 'Cachuntu performance profile placeholder with safe Ubuntu defaults'
 sha256sum "$out"/*.deb >"$out/SHA256SUMS"

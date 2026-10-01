@@ -15,13 +15,10 @@ case "${1:-}" in
   </alias>
 </fontconfig>
 XML
-    cat >/etc/xdg/kdeglobals <<'KDE'
-[General]
-font=Inter,10,-1,5,50,0,0,0,0,0
-menuFont=Inter,10,-1,5,50,0,0,0,0,0
-toolBarFont=Inter,10,-1,5,50,0,0,0,0,0
-smallestReadableFont=Inter,8,-1,5,50,0,0,0,0,0
-KDE
+    for key in font menuFont toolBarFont; do
+      kwriteconfig6 --file /etc/xdg/kdeglobals --group General --key "$key" 'Inter,10,-1,5,50,0,0,0,0,0'
+    done
+    kwriteconfig6 --file /etc/xdg/kdeglobals --group General --key smallestReadableFont 'Inter,8,-1,5,50,0,0,0,0,0'
     cat >/etc/dconf/profile/user <<'PROFILE'
 user-db:user
 system-db:local
@@ -31,7 +28,9 @@ PROFILE
 font-name='Inter 11'
 document-font-name='Inter 11'
 DCONF
-    if command -v dconf >/dev/null 2>&1; then dconf update; fi
+    # A profile must never reference an absent compiled database.
+    dconf update
+    test -s /etc/dconf/db/local
     if command -v fc-cache >/dev/null 2>&1; then fc-cache -f; fi
     ;;
   desktop)

@@ -10,7 +10,12 @@ check systemctl is-active --quiet display-manager
 if command -v dracut >/dev/null; then check command -v dracut; else check command -v update-initramfs; fi
 printf 'Kernel: '; uname -r
 printf 'Secure Boot: '; mokutil --sb-state 2>&1 || true
-printf 'DKMS:\n'; dkms status 2>&1 || true
+if command -v dkms >/dev/null; then printf 'DKMS:\n'; dkms status; else printf 'SKIP DKMS: not installed in this guest\n'; fi
+# A font profile that references a missing compiled database affects every
+# dconf consumer, including Plasma portal helpers and GTK applications.
+if [[ -f /etc/dconf/profile/user ]] && grep -qx 'system-db:local' /etc/dconf/profile/user; then
+  check test -s /etc/dconf/db/local
+fi
 systemctl --failed --no-pager
 simulation=$(apt-get -s autoremove 2>&1) || { printf '%s\n' "$simulation"; exit 1; }
 printf '%s\n' "$simulation"

@@ -83,3 +83,7 @@ text = text.replace('NAME="Ubuntu"', 'NAME="Cachuntu"')
 text = text.replace("ID_LIKE=debian", "ID_LIKE=ubuntu debian")
 text = text.replace("LOGO=ubuntu-logo", "LOGO=cachuntu-logo")
 os_release.write_text(text)
+
+# Keep the installed desktop identity consistent with the installer.
+from brand_desktop import apply
+apply(root, assets)

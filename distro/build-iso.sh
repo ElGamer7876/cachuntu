@@ -26,6 +26,12 @@ printf '%s  %s\n' "$INTER_SHA256" "$scratch/$INTER_DEB" | sha256sum -c -
 cp "$scratch/$INTER_DEB" "$scratch/rootfs/tmp/"
 chroot "$scratch/rootfs" dpkg -i "/tmp/$INTER_DEB"
 rm -f -- "$scratch/rootfs/tmp/$INTER_DEB"
+curl --fail --location --retry 3 --output "$scratch/$DCONF_DEB" "$DCONF_URL"
+printf '%s  %s\n' "$DCONF_SHA256" "$scratch/$DCONF_DEB" | sha256sum -c -
+cp "$scratch/$DCONF_DEB" "$scratch/rootfs/tmp/"
+chroot "$scratch/rootfs" dpkg -i "/tmp/$DCONF_DEB"
+rm -f -- "$scratch/rootfs/tmp/$DCONF_DEB"
+python3 "$repo/distro/qa/check-windows-migration.py"
 bash "$repo/distro/packaging/build-debs.sh" "$scratch/debs"
 mkdir -p "$scratch/rootfs/tmp/cachuntu-debs"
 cp "$scratch"/debs/*.deb "$scratch/rootfs/tmp/cachuntu-debs/"
