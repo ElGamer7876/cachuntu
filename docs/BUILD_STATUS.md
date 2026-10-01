@@ -73,3 +73,9 @@ After the user reconnected E:, Windows exposed the volume again. A read-only `qe
 QMP input now uses QEMU's `send-key` command with scheduled releases and slower typing. This resolved the reproduced missing-key/modifier behavior in the TTY login. Graphical application startup/focus must be confirmed before typing commands. Firefox remains open; no host browser was closed.
 
 The source candidate is now **26.10.1.1**, to give the font repair and new defaults a distinct package version. No 26.10.1.1 ISO has been generated. The verified 26.10.1.0 ISO is unchanged. The migration prototype, theme and font repairs were published on `lts/26.04`. The prototype passed synthetic data tests; real Windows SSH and the graphical migration wizard remain pending.
+
+## Guest prototype smoke check
+
+The normal-boot overlay accepted a TTY login and sudo commands after the QMP fix. The Cachuntu desktop assets, dconf repair and migration CLI were installed only in that disposable overlay. `cachuntu-migrate --help` displayed the four export/plan/import/fetch-ssh actions. No personal Windows files were read or migrated. The global-theme command completed with DISPLAY/xrdb warnings; the session still visibly retained the Kubuntu wallpaper after the first D-Bus update, so visual activation is not yet considered passed. The SVG wallpaper is available as `cachuntu-wallpaper.svg` for review. Plymouth and complete desktop branding remain pending.
+
+The prepared root filesystem was modified during font and branding checks. Do not reuse it unchanged for the next ISO: its selected font overrides must be restored to the fresh-build baseline so the Desktop default choice remains effective. A fresh build is preferable when sufficient stable storage is available. The source build installs dependencies and applies the font only through the installation choice.
