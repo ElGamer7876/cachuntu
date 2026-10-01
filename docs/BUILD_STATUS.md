@@ -1,6 +1,6 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. Upgrade validation is blocked by E: disappearing and Btrfs I/O errors.**
+Updated: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. A subsequent normal boot without the ISO reached Plasma with 4 GiB RAM. Upgrade/reboot validation remains incomplete after E: disappeared and Btrfs reported I/O errors.**
 
 The base remains Kubuntu 26.04.1 amd64, SHA256 `831e4d4bb85098339ba43d3502cd6619b27e76daf37246a084cd68a6413090b8`. Cachuntu `26.10.1.0` is a calendar version. The `lts/26.04` branch uses Ubuntu 26.04 repositories without Ubuntu 26.10 packages.
 
@@ -44,7 +44,7 @@ Build logs: `E:\Cachuntu-build\outputs\build-26.10.1.0.log` and WSL `.cache/buil
 
 1. ISO assembly, export SHA256, and BIOS/UEFI boot record inspection completed. Runtime BIOS boot is still pending.
 2. UEFI live boot, Return activation, Calamares launch, and default choices verified. QMP keyboard input works with slower typing. Pointer coordinate alignment required diagnosis; clicks selected the virtual disk installation mode. The filesystem selector display mismatch is fixed in source for the next candidate.
-3. Install to QCOW2 and boot without the ISO; run postinstallation QA, Ubuntu upgrade/reboot, autoremove simulation, portals, and PipeWire tests.
+3. QCOW2 installation and normal installed boot completed. Postinstallation anchors and autoremove passed. Complete Ubuntu upgrade/reboot and interactive portal/PipeWire tests.
 4. Verify BIOS boot, a clean build, and bit-for-bit reproducibility. This rebuild reuses a prepared root filesystem.
 5. Test Secure Boot, DKMS, NVIDIA, and suspend/resume where meaningful. Retain initramfs-tools until a Dracut migration passes installation and upgrade tests.
 
@@ -65,3 +65,11 @@ New source includes a Cachuntu dark desktop theme and SVG wallpaper embedding th
 The guest's apt-get update succeeded against Resolute repositories. apt-get upgrade began but was interrupted while unpacking packages: Btrfs reported errno=-5 in write_all_supers/device barriers and Windows no longer exposed E:. QEMU was paused immediately and then closed. The interrupted update is confined to the debug overlay; do not merge that overlay into the preserved installation. Its temporary debug boot does not constitute a verified upgrade/reboot. Do not resume writes to E: until storage is available and stable.
 
 Evidence in the Windows workspace: `26.10.1.0-calamares.log`, `installed-offline-inspection.log`, `installed-serial-diagnostic.log`, `calamares-completed-26.10.1.0.png` and `installed-plasma-26.10.1.0.png`. Earlier live boot logs contain no errors and do not describe the installed boot. The final ISO SHA256 remains `f3f58ac5b2d63acffcccf65c9da4a461b8bf1b4b7732ec78b4bd96d0781f0bd0`.
+
+## Normal boot and source candidate update
+
+After the user reconnected E:, Windows exposed the volume again. A read-only `qemu-img check` of the preserved installed QCOW2 found no structural errors. This does not establish physical disk health. A new normal-boot overlay, `cachuntu-26.10.1.0-normal-verify.qcow2`, booted through installed GRUB with 4096 MiB, no ISO, and no direct-kernel/debug-shell arguments. The desktop appeared and the normal TTY3 login succeeded. Evidence: `normal-installed-boot.png` and `guest-console.png` in the task workspace. The failed-upgrade debug overlay remains separate and must not be merged.
+
+QMP input now uses QEMU's `send-key` command with scheduled releases and slower typing. This resolved the reproduced missing-key/modifier behavior in the TTY login. Graphical application startup/focus must be confirmed before typing commands. Firefox remains open; no host browser was closed.
+
+The source candidate is now **26.10.1.1**, to give the font repair and new defaults a distinct package version. No 26.10.1.1 ISO has been generated. The verified 26.10.1.0 ISO is unchanged. The migration prototype, theme and font repairs were published on `lts/26.04`. The prototype passed synthetic data tests; real Windows SSH and the graphical migration wizard remain pending.
