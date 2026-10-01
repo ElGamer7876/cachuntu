@@ -4,6 +4,7 @@
 from pathlib import Path
 import shutil
 import sys
+import re
 import yaml
 
 root = Path(sys.argv[1])
@@ -43,6 +44,8 @@ start.write_text(script.replace("kubuntu-installer-prompt", "/usr/libexec/cachun
 
 desktop = root / "usr/share/applications/kubuntu-calamares.desktop"
 text = desktop.read_text().replace("Kubuntu", "Cachuntu").replace("kubuntu", "Cachuntu")
+text = text.replace("كوبونتو", "Cachuntu")
+text = re.sub(r'(?m)^(Name(?:\[[^\]]+\])?=.*?)(?:26\.04|[0-9]{2}\.[0-9]{1,2}\.[0-9]{1,2}\.[0-9]+)$', lambda match: match[1] + version, text)
 text = text.replace("Icon=system-software-install", "Icon=cachuntu-logo")
 text = text.replace("Exec=sudo /usr/bin/calamares-launch-normal", "Exec=/usr/libexec/cachuntu-launch-installer")
 desktop.write_text(text)
@@ -53,7 +56,7 @@ about = root / "etc/xdg/kcm-about-distrorc"
 text = about.read_text()
 text = text.replace("LogoPath=/usr/share/plasma/avatars/kubuntu-bug.png", "LogoPath=/usr/share/pixmaps/cachuntu-logo.png")
 text = text.replace("Name=Kubuntu", "Name=Cachuntu")
-text = text.replace("Version=26.04 LTS", f"Version={version} Preview")
+text = re.sub(r'^Version=.*$', f"Version={version} Preview", text, flags=re.MULTILINE)
 text = text.replace("Website=https://www.kubuntu.org", "Website=https://github.com/ElGamer7876/cachuntu")
 about.write_text(text)
 
@@ -75,7 +78,7 @@ welcome_conf.write_text(welcome_conf.read_text().replace(
 
 os_release = root / "etc/os-release"
 text = os_release.read_text()
-text = text.replace('PRETTY_NAME="Ubuntu 26.04.1 LTS"', f'PRETTY_NAME="Cachuntu {version} Preview"')
+text = re.sub(r'^PRETTY_NAME=.*$', f'PRETTY_NAME="Cachuntu {version} Preview"', text, flags=re.MULTILINE)
 text = text.replace('NAME="Ubuntu"', 'NAME="Cachuntu"')
 text = text.replace("ID_LIKE=debian", "ID_LIKE=ubuntu debian")
 text = text.replace("LOGO=ubuntu-logo", "LOGO=cachuntu-logo")
