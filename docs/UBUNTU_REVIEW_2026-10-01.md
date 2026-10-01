@@ -22,3 +22,29 @@ The build now rejects stale packages before SquashFS compression and ISO export.
 ## Environment limits
 
 At review time C: had approximately 0.6 GB free. E: was accessible, but an earlier guest upgrade had hit Btrfs I/O errors when E: disappeared. This scheduled pass validates source, package construction and the read-only prepared-root gate. Full updated ISO generation and upgrade/reboot remain pending; the interrupted overlay is not reused or merged.
+
+## Follow-up after the host restart
+
+C: now has approximately 35 GB free, enabling a clean rebuild inside WSL ext4.
+Eight official Resolute packages (the four security targets and version-coupled
+OpenSSL/KCoreAddons companions) were resolved with isolated APT state against
+the prepared root's dpkg database. APT authenticated the Ubuntu indexes with
+the Ubuntu archive keyring; archive SHA256 values were matched to their index
+records. `distro/security-updates.lock.json` pins every package URL, version,
+architecture and hash. The builder installs the complete locked batch, blocks
+service starts during that step and rejects unfinished dpkg configuration.
+No host packages are installed by the resolver. The installed root retains the
+lock for audit. A fresh-root build verifies the resolved dependency set before
+the security gate, compression and export. Upgrade/reboot still needs VM QA.
+
+The first clean-root attempt was stopped during extraction when Windows
+paging and WSL storage growth left approximately 4 GB on C:. No package changes
+or ISO export occurred in that attempt. Logs and partial scratch were retained.
+Dropping the build environment's page cache restored memory headroom; Discord
+and Spotify remain open at the user's request. The restarted clean build uses
+a new 36 GiB ext4 filesystem in `E:/Cachuntu-build/work-26.10.1.2.ext4`, mounted
+through a loop device. This is a regular virtual-disk file, not a physical disk.
+Both extraction queues and compression have explicit memory/worker limits.
+The official source ISO is read from E: and verified against the pinned hash.
+Previous E: failures make final export verification and VM I/O checks necessary;
+the interrupted upgrade overlay remains excluded.

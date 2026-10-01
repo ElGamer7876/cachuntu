@@ -19,7 +19,7 @@ echo "Scratch: $scratch"
 xorriso -osirrox on -indev "$source_iso" -extract /casper/filesystem.squashfs "$scratch/base.squashfs"
 xorriso -osirrox on -indev "$source_iso" -extract /md5sum.txt "$scratch/md5sum.txt"
 xorriso -osirrox on -indev "$source_iso" -extract /boot/grub/grub.cfg "$scratch/grub.cfg"
-unsquashfs -d "$scratch/rootfs" "$scratch/base.squashfs"
+unsquashfs -processors 2 -data-queue 32 -frag-queue 16 -d "$scratch/rootfs" "$scratch/base.squashfs"
 rm -f -- "$scratch/base.squashfs"
 curl --fail --location --retry 3 --output "$scratch/$INTER_DEB" "$INTER_URL"
 printf '%s  %s\n' "$INTER_SHA256" "$scratch/$INTER_DEB" | sha256sum -c -
@@ -43,6 +43,7 @@ printf '%s  %s\n' "$PORTAL_SHA256" "$scratch/$PORTAL_DEB" | sha256sum -c -
 cp "$scratch/$PORTAL_DEB" "$scratch/rootfs/tmp/"
 chroot "$scratch/rootfs" dpkg -i "/tmp/$PORTAL_DEB"
 rm -f -- "$scratch/rootfs/tmp/$PORTAL_DEB"
+python3 "$repo/distro/install-security-updates.py" --root "$scratch/rootfs" --cache "$repo/.cache/security-packages"
 # Refuse to compress/export an image missing reviewed Resolute security fixes.
 python3 "$repo/distro/qa/test-security-baseline.py"
 python3 "$repo/distro/qa/check-security-baseline.py" --root "$scratch/rootfs"
