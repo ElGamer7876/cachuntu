@@ -1,0 +1,3 @@
+#!/bin/sh
+# Keep the current live display credentials when launching the root installer.
+exec sudo --preserve-env=DISPLAY,XAUTHORITY,XDG_RUNTIME_DIR,WAYLAND_DISPLAY /usr/bin/calamares-launch-normal "$@"

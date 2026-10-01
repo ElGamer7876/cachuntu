@@ -33,6 +33,9 @@ shutil.copyfile(assets / "cachuntu-logo.png", root / "usr/share/pixmaps/cachuntu
 welcome = root / "usr/libexec/cachuntu-welcome.py"
 shutil.copyfile(assets / "welcome.py", welcome)
 welcome.chmod(0o755)
+launcher = root / "usr/libexec/cachuntu-launch-installer"
+shutil.copyfile(assets / "launch-installer", launcher)
+launcher.chmod(0o755)
 start = root / "usr/libexec/start-kubuntu-live-env"
 script = start.read_text().replace("Starts the Kubuntu Live Environment.", "Starts the Cachuntu Live Environment.")
 assert "kubuntu-installer-prompt" in script or "/usr/libexec/cachuntu-welcome.py" in script
@@ -41,6 +44,7 @@ start.write_text(script.replace("kubuntu-installer-prompt", "/usr/libexec/cachun
 desktop = root / "usr/share/applications/kubuntu-calamares.desktop"
 text = desktop.read_text().replace("Kubuntu", "Cachuntu").replace("kubuntu", "Cachuntu")
 text = text.replace("Icon=system-software-install", "Icon=cachuntu-logo")
+text = text.replace("Exec=sudo /usr/bin/calamares-launch-normal", "Exec=/usr/libexec/cachuntu-launch-installer")
 desktop.write_text(text)
 session = root / "usr/share/wayland-sessions/kubuntu-live-environment.desktop"
 session.write_text(session.read_text().replace("Kubuntu", "Cachuntu"))

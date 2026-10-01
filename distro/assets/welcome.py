@@ -44,9 +44,11 @@ class Welcome(QWidget):
         buttons = QHBoxLayout()
         install = QPushButton("Install Cachuntu")
         install.setObjectName("install")
+        install.setAutoDefault(True)
         install.clicked.connect(self.install)
         trial = QPushButton("Try Cachuntu")
         trial.setObjectName("try")
+        trial.setAutoDefault(True)
         trial.clicked.connect(self.close)
         buttons.addWidget(install)
         buttons.addWidget(trial)
@@ -56,7 +58,7 @@ class Welcome(QWidget):
     def install(self):
         self.hide()
         with Path("/tmp/cachuntu-calamares-launch.log").open("a") as log:
-            result = subprocess.run(["sudo", "/usr/bin/calamares-launch-normal"],
+            result = subprocess.run(["/usr/libexec/cachuntu-launch-installer"],
                                     stdout=log, stderr=subprocess.STDOUT, check=False)
         if result.returncode:
             self.show()
