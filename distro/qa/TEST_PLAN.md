@@ -32,12 +32,12 @@ read-only. The ISO export hash must be verified before starting the VM.
 
 ```bash
 sudo bash distro/qa/run-qemu.sh \
-  /mnt/c/Users/elgam/OneDrive/Documentos/ChatGPT/cachuntu/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
-  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 live
+  /mnt/e/Cachuntu-build/outputs/live-fix-26.10.1.3/cachuntu-26.10.1.3-preview-amd64.iso \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.3-install.qcow2 live
 # After guest shutdown and installation, boot without attaching the ISO:
 sudo bash distro/qa/run-qemu.sh \
-  /mnt/c/Users/elgam/OneDrive/Documentos/ChatGPT/cachuntu/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
-  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 installed
+  /mnt/e/Cachuntu-build/outputs/live-fix-26.10.1.3/cachuntu-26.10.1.3-preview-amd64.iso \
+  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.3-install.qcow2 installed
 ```
 
 The QMP socket is `/tmp/<QCOW2 basename without .qcow2>.qmp.sock`; pass it to
@@ -53,3 +53,44 @@ virtual backend exits when its session application closes. Also click Try in
 the actual live welcome and confirm Plasma is running; the virtual test alone
 does not establish the real display transition. Collect
 `bash distro/qa/live-session-diagnostic.sh` when that transition fails.
+
+## Disposable installed-system update test
+
+Shut down the installed guest before creating a QCOW2 child with an explicit
+QCOW2 backing format. Copy its matching OVMF variables file to the child's
+`.OVMF_VARS.fd` path, then boot the child in `installed` mode. Preserve the
+successful parent. Do not merge an interrupted upgrade into it.
+
+`upgrade-installed.py` is specific to the disposable `cachuntu-vm` guest with
+the Cachuntu Resolute identity and `/dev/vda2[/@]` root. It refuses package
+removals in the simulated upgrade, then runs the real upgrade, package audit
+and post-install checks. It uploads the full result to the local diagnostic
+receiver at the QEMU NAT host address `10.0.2.2:38763`. The receiver must be
+running before the test. This is a lab capture endpoint, not a distribution
+service. Failed checks do not authorize bypassing the guard.
+
+After the update, reboot without the ISO, log into Plasma and record the
+running kernel and post-install checks again. `capture-installed.py
+--post-route reboot` uploads the reboot checks and runtime details. Retain
+baseline captures separately because the runtime route replaces its previous
+report. A successful package update alone does not prove the reboot gate.
+
+Start the capture receiver on the QEMU host before running guest scripts:
+
+```bash
+python3 distro/qa/vm-artifact-receiver.py \
+  --output /mnt/c/Users/elgam/OneDrive/Documentos/ChatGPT/cachuntu/outputs \
+  --version 26.10.1.3
+```
+
+Inside the disposable installed guest, mount the runner's QA share read-only
+at `/mnt/cachuntuqa`, then run:
+
+```bash
+sudo python3 /mnt/cachuntuqa/upgrade-installed.py
+# Only after its success, reboot and log into the installed desktop.
+sudo python3 /mnt/cachuntuqa/capture-installed.py --post-route reboot
+```
+
+Guest keyboard layout changes used for automation are transient and do not
+change the installed desktop's selected keyboard layout.
