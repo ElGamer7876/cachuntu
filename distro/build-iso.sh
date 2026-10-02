@@ -66,5 +66,14 @@ mksquashfs "$scratch/rootfs" "$scratch/filesystem.squashfs" -noappend -comp zstd
 python3 "$repo/distro/update-md5sums.py" "$scratch/md5sum.txt" "$scratch/filesystem.squashfs" "boot/grub/grub.cfg=$scratch/grub.cfg"
 xorriso -indev "$source_iso" -outdev "$output_iso" -overwrite on -map "$scratch/filesystem.squashfs" /casper/filesystem.squashfs -map "$scratch/md5sum.txt" /md5sum.txt -map "$scratch/grub.cfg" /boot/grub/grub.cfg -volid "CACHUNTU_${CACHUNTU_VERSION//./_}" -boot_image any replay -commit
 xorriso -indev "$output_iso" -ls /casper
-sha256sum "$output_iso" | tee "${output_iso}.sha256"
+python3 "$repo/distro/qa/verify-iso-content.py" "$output_iso" --report "${output_iso}.validation.json"
+python3 - "$output_iso" <<'PY'
+import json, sys
+from pathlib import Path
+iso = Path(sys.argv[1])
+report = json.loads(Path(str(iso) + '.validation.json').read_text())
+line = report['sha256'] + '  ' + str(iso) + '\n'
+Path(str(iso) + '.sha256').write_text(line)
+print(line, end='')
+PY
 echo "Build finished; retain scratch until QA passes: $scratch"

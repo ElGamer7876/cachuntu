@@ -14,6 +14,13 @@ Use a new QCOW2 virtual disk in QEMU/KVM. Never select a physical disk.
 
 The Kubuntu 26.04.1 source ISO uses `initramfs-tools`. Evaluate Dracut only after installation, upgrade, and Secure Boot tests pass in a VM.
 
+`python3 distro/qa/verify-iso-content.py IMAGE.iso --report IMAGE.validation.json`
+checks every MD5 manifest entry through the ISO's file extents and records the
+whole-image SHA256. It supports multi-extent files larger than 4 GiB and avoids
+SquashFS mounting/extraction. Any missing, duplicate, malformed or mismatched
+entry rejects the artifact before writing a success report. The builder runs
+this check before creating its SHA256 sidecar. Runtime gates remain separate.
+
 ## Direct QEMU window (October 1 runner)
 
 Use regular ISO and QCOW2 files. The runner uses KVM, 4 GiB RAM, UEFI,
