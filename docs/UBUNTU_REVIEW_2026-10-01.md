@@ -48,3 +48,11 @@ Both extraction queues and compression have explicit memory/worker limits.
 The official source ISO is read from E: and verified against the pinned hash.
 Previous E: failures make final export verification and VM I/O checks necessary;
 the interrupted upgrade overlay remains excluded.
+
+## Build result
+
+The fresh-root security baseline passed, so the lock installs the reviewed
+fixes and their dependency companions successfully. The ISO attempt then
+failed at final SHA256 reading with an E: I/O error; E: was absent at the next
+check. This is an artifact-storage failure, not a completed release. The old
+validated ISO is unchanged. See BUILD_STATUS.md for the recovery gate.

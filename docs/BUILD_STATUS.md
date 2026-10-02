@@ -1,10 +1,10 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.2 clean build is in progress. Eight locked
+Updated: 2026-10-01. **26.10.1.2 reached final ISO hashing but failed with an E: input/output error; E: subsequently disappeared. Eight locked
 Resolute security packages are now installed by the builder before its security
 gate. The new Plasma wallpaper layout uses a validated 1920x1080 PNG derived
 from the existing approved-logo SVG. No 26.10.1.2 ISO or runtime pass is claimed
-until the build and VM checks finish.**
+until the ISO can be recovered, hashed successfully and checked in a VM.**
 
 Previous validation: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. A subsequent normal boot without the ISO reached Plasma with 4 GiB RAM. Upgrade/reboot validation remains incomplete after E: disappeared and Btrfs reported I/O errors.**
 
@@ -85,3 +85,38 @@ The source candidate is now **26.10.1.1**, to give the font repair and new defau
 The normal-boot overlay accepted a TTY login and sudo commands after the QMP fix. The Cachuntu desktop assets, dconf repair and migration CLI were installed only in that disposable overlay. `cachuntu-migrate --help` displayed the four export/plan/import/fetch-ssh actions. No personal Windows files were read or migrated. The global-theme command completed with DISPLAY/xrdb warnings; the session still visibly retained the Kubuntu wallpaper after the first D-Bus update, so visual activation is not yet considered passed. The SVG wallpaper is available as `cachuntu-wallpaper.svg` for review. Plymouth and complete desktop branding remain pending.
 
 The prepared root filesystem was modified during font and branding checks. Do not reuse it unchanged for the next ISO: its selected font overrides must be restored to the fresh-build baseline so the Desktop default choice remains effective. A fresh build is preferable when sufficient stable storage is available. The source build installs dependencies and applies the font only through the installation choice.
+
+## Build memory budget — October 1 continuation
+
+The resumed E: build runs in a dedicated cgroup: MemoryHigh 1536 MiB,
+MemoryMax 2560 MiB and MemorySwapMax 512 MiB. This bounds file cache as well as
+anonymous worker memory. The running builder and its descendants were moved
+into that group, and old page-cache charges were released after sync. Future
+systemd-hosted builds create the same budget automatically with systemd-run.
+Hosts without systemd still use two extraction/compression workers, 32/16 MiB
+extraction queues and a 512 MiB compression budget. These settings protect the
+host's memory headroom; they do not establish bit-for-bit reproducibility.
+
+## Final hashing failure — October 1
+
+The clean-root security gate passed for libssl3t64 3.5.5-1ubuntu3.7,
+libkf6coreaddons6 6.24.0-0ubuntu1.1, libxpm4
+1:3.5.17-1ubuntu0.26.04.2 and gstreamer1.0-plugins-good 1.28.2-2ubuntu0.4.
+The builder subsequently reached its final sha256sum command, which returned
+`Input/output error` for the new ISO. The Windows launcher recorded Linux exit
+1 at 18:00 local time and did not export or certify the ISO. At the next check,
+E: was absent from Windows and the ext4 loop mount was unavailable after the
+WSL environment restarted. No new QEMU guest was launched.
+
+Treat every 26.10.1.2 artifact in the work image as unverified until recovered.
+Do not announce a SHA256, release this ISO or overwrite the validated 26.10.1.0
+artifact. The new virtual work image and its scratch files remain on E:; source
+and commits remain in WSL on C:. Windows workspace logs are
+`build-26.10.1.2-e.log` and `26.10.1.2-build-failed.txt`. The package manifest and
+input metadata were written inside the E: work filesystem before compression.
+
+Next: wait for E: to become accessible, inspect the virtual filesystem without
+writing to it, recover the assembled ISO to C: if space permits, and hash the
+recovered bytes. Resume VM QA only after successful recovery and verification.
+Keep interrupted guest upgrade overlays excluded. Rebuild only if the image
+cannot be recovered or its contents fail validation, using stable storage.

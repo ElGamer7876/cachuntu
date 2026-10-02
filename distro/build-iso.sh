@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 (( EUID == 0 )) || { echo "Run as root" >&2; exit 1; }
+# Bound file cache as well as workers on systemd build hosts.
+if [[ -z "${CACHUNTU_BUILD_MEMORY_SCOPE:-}" && -d /run/systemd/system ]] && command -v systemd-run >/dev/null; then
+  exec systemd-run --scope --quiet --unit="cachuntu-build-$$" \
+    --property=MemoryHigh=1536M --property=MemoryMax=2560M --property=MemorySwapMax=512M \
+    env CACHUNTU_BUILD_MEMORY_SCOPE=1 bash "$0" "$@"
+fi
 repo=$(cd "$(dirname "$0")/.." && pwd)
 source "$repo/distro/release.env"
 source_iso=${1:?official Kubuntu ISO path}
