@@ -1,12 +1,36 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.2 was recovered after E: was reconnected. Its
+Updated: 2026-10-01. **26.10.1.3 assembled successfully, passed all 693 ISO
+checksum entries and matched two independent whole-image SHA256 calculations.
+UEFI live boot reached the branded Calamares installer after the user selected
+Install Cachuntu. The welcome compositor fix passed a real KWin virtual-backend
+lifecycle check (exit 0 in 14 seconds), but the actual Try-to-Plasma transition
+and installation of this version remain pending.**
+
+Current candidate:
+`E:\Cachuntu-build\outputs\live-fix-26.10.1.3\cachuntu-26.10.1.3-preview-amd64.iso`
+
+Size: 5,235,343,360 bytes. SHA256:
+`318d68bcdaf207e8462892e6f56f5b794c2005b79c4f54a8294de5dae44d289b`.
+Evidence in the Windows workspace: `outputs/26.10.1.3-validation.json`,
+`26.10.1.3-build-inputs.json`, package manifest, KWin lifecycle log and build
+log excerpt; `guest-26.10.1.3-boot.png` shows UEFI GRUB and
+`guest-26.10.1.3-live.png` shows Calamares. The ISO preserves BIOS/UEFI boot
+records, but runtime BIOS boot is untested. This incremental candidate applies
+the patch through a child QCOW2 overlay of the recovered fresh 26.10.1.2 root;
+the original virtual work image remains unchanged. The eight Resolute fixes,
+installer defaults and branding gates passed again before compression.
+No bit-for-bit reproducibility, new installation or upgrade/reboot pass is claimed.
+
+## Recovery of the previous candidate
+
+**26.10.1.2 was recovered after E: was reconnected. Its
 full copy and independent C: readback SHA256 match; all 693 ISO checksum entries
 passed. Security, installer-default and branding checks passed on selectively
 extracted artifact metadata. UEFI live boot reached the branded welcome screen.
 Try Cachuntu exposed a compositor lifecycle defect: closing the welcome left
 KWin running and prevented Plasma from starting. Source candidate 26.10.1.3
-adds `--exit-with-session`; its incremental ISO and runtime handoff are pending.
+adds `--exit-with-session`; the actual live runtime handoff remains pending.
 26.10.1.2 is a verified diagnostic artifact, not a completed release.**
 
 Recovered artifact: `C:\Users\elgam\OneDrive\Documentos\ChatGPT\cachuntu\outputs\cachuntu-26.10.1.2-preview-amd64.iso`

@@ -2,8 +2,9 @@
 
 Source candidate: Cachuntu 26.10.1.3, Ubuntu Resolute 26.04 LTS. The recovered
 26.10.1.2 ISO contains the reviewed security fixes and passes artifact checks.
-The next same-day patch corrects the welcome-to-Plasma compositor lifecycle;
-its runtime handoff and ISO validation remain pending.
+The same-day patch 26.10.1.3 corrects the welcome compositor lifecycle. It passed
+ISO content/SHA256 checks and reached Calamares under UEFI. The actual
+Try-to-Plasma transition and installed upgrade/reboot remain pending.
 
 ## Applicable security updates
 
