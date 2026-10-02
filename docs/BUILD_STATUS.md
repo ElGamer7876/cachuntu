@@ -1,10 +1,24 @@
 # Cachuntu 0.1 build status
 
-Updated: 2026-10-01. **26.10.1.2 reached final ISO hashing but failed with an E: input/output error; E: subsequently disappeared. Eight locked
-Resolute security packages are now installed by the builder before its security
-gate. The new Plasma wallpaper layout uses a validated 1920x1080 PNG derived
-from the existing approved-logo SVG. No 26.10.1.2 ISO or runtime pass is claimed
-until the ISO can be recovered, hashed successfully and checked in a VM.**
+Updated: 2026-10-01. **26.10.1.2 was recovered after E: was reconnected. Its
+full copy and independent C: readback SHA256 match; all 693 ISO checksum entries
+passed. Security, installer-default and branding checks passed on selectively
+extracted artifact metadata. UEFI live boot reached the branded welcome screen.
+Try Cachuntu exposed a compositor lifecycle defect: closing the welcome left
+KWin running and prevented Plasma from starting. Source candidate 26.10.1.3
+adds `--exit-with-session`; its incremental ISO and runtime handoff are pending.
+26.10.1.2 is a verified diagnostic artifact, not a completed release.**
+
+Recovered artifact: `C:\Users\elgam\OneDrive\Documentos\ChatGPT\cachuntu\outputs\cachuntu-26.10.1.2-preview-amd64.iso`
+
+Size: 5,235,736,576 bytes. SHA256:
+`df43b7664b3a50016595c2f94e14907c0ab93239bacd7b54810ccb5cb9b18107`.
+Evidence: `outputs/26.10.1.2-recovery-copy.json`, package manifest, build inputs,
+and retained Linux build log. `guest-26.10.1.2-live.png` records the welcome.
+Recovery replayed the ext4 journal into a QCOW2 overlay; the original E: virtual
+work image was not modified. The copy was renamed from `.part` only after
+artifact checks passed. Eight locked Resolute security fixes are present.
+The following sections retain earlier build history and remaining gates.
 
 Previous validation: 2026-10-01. **26.10.1.0 ISO export passed SHA256. Btrfs installation completed. The installed Plasma Wayland desktop booted on a diagnostic overlay with 4 GiB RAM. A subsequent normal boot without the ISO reached Plasma with 4 GiB RAM. Upgrade/reboot validation remains incomplete after E: disappeared and Btrfs reported I/O errors.**
 

@@ -20,7 +20,7 @@ assert "--preserve-env=DISPLAY,XAUTHORITY,XDG_RUNTIME_DIR,WAYLAND_DISPLAY" in (r
 assert "Exec=/usr/libexec/cachuntu-launch-installer" in (root / "usr/share/applications/kubuntu-calamares.desktop").read_text()
 live_start = (root / "usr/libexec/start-kubuntu-live-env").read_text()
 assert "kubuntu-installer-prompt" not in live_start
-assert "kwin_wayland --xwayland --no-lockscreen /usr/libexec/cachuntu-welcome.py" in live_start
+assert "kwin_wayland --xwayland --no-lockscreen --exit-with-session /usr/libexec/cachuntu-welcome.py" in live_start
 assert "Name=Install Cachuntu" in (root / "usr/share/applications/kubuntu-calamares.desktop").read_text()
 assert "Name=Cachuntu" in (root / "etc/xdg/kcm-about-distrorc").read_text()
 assert "Current=cachuntu" in (root / "etc/sddm.conf.d/20-kubuntu.conf").read_text()

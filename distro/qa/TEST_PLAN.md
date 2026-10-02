@@ -25,11 +25,11 @@ read-only. The ISO export hash must be verified before starting the VM.
 
 ```bash
 sudo bash distro/qa/run-qemu.sh \
-  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
+  /mnt/c/Users/elgam/OneDrive/Documentos/ChatGPT/cachuntu/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
   /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 live
 # After guest shutdown and installation, boot without attaching the ISO:
 sudo bash distro/qa/run-qemu.sh \
-  /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
+  /mnt/c/Users/elgam/OneDrive/Documentos/ChatGPT/cachuntu/outputs/cachuntu-26.10.1.2-preview-amd64.iso \
   /mnt/e/Cachuntu-build/outputs/cachuntu-26.10.1.2-install.qcow2 installed
 ```
 
@@ -38,3 +38,11 @@ The QMP socket is `/tmp/<QCOW2 basename without .qcow2>.qmp.sock`; pass it to
 Unix socket path on a Linux filesystem.
 Use guest keyboard/mouse controls only after confirming the focused guest
 screen. Launching the runner does not prove installation or runtime QA.
+
+The recovered 26.10.1.2 artifact has a known Try-to-Plasma defect. Use the
+corrected next candidate for the handoff/install gate. In a disposable KDE
+guest, `bash distro/qa/check-live-session-exit.sh` checks that a temporary KWin
+virtual backend exits when its session application closes. Also click Try in
+the actual live welcome and confirm Plasma is running; the virtual test alone
+does not establish the real display transition. Collect
+`bash distro/qa/live-session-diagnostic.sh` when that transition fails.

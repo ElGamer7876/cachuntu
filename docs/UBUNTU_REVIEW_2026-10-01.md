@@ -1,6 +1,9 @@
 # Ubuntu review — 2026-10-01
 
-Source candidate: Cachuntu 26.10.1.2, Ubuntu Resolute 26.04 LTS. The same-day patch increments for an urgent security release gate; no new ISO has been produced.
+Source candidate: Cachuntu 26.10.1.3, Ubuntu Resolute 26.04 LTS. The recovered
+26.10.1.2 ISO contains the reviewed security fixes and passes artifact checks.
+The next same-day patch corrects the welcome-to-Plasma compositor lifecycle;
+its runtime handoff and ISO validation remain pending.
 
 ## Applicable security updates
 
@@ -56,3 +59,10 @@ fixes and their dependency companions successfully. The ISO attempt then
 failed at final SHA256 reading with an E: I/O error; E: was absent at the next
 check. This is an artifact-storage failure, not a completed release. The old
 validated ISO is unchanged. See BUILD_STATUS.md for the recovery gate.
+
+After reconnection, journal replay into a separate QCOW2 overlay recovered the
+new ISO without changing the original virtual work image. Copy/readback SHA256
+and all 693 checksum entries passed on C:. Selectively extracted package and
+configuration metadata passed the security, defaults and branding checks.
+UEFI live boot passed; the Try-to-desktop lifecycle defect requires the next
+patch. Full installed upgrade/reboot is still pending.

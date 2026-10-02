@@ -40,7 +40,13 @@ launcher.chmod(0o755)
 start = root / "usr/libexec/start-kubuntu-live-env"
 script = start.read_text().replace("Starts the Kubuntu Live Environment.", "Starts the Cachuntu Live Environment.")
 assert "kubuntu-installer-prompt" in script or "/usr/libexec/cachuntu-welcome.py" in script
-start.write_text(script.replace("kubuntu-installer-prompt", "/usr/libexec/cachuntu-welcome.py"))
+script = script.replace("kubuntu-installer-prompt", "/usr/libexec/cachuntu-welcome.py")
+# The temporary compositor must exit when the welcome application closes.
+# Otherwise Try leaves an empty compositor and startplasma-wayland never runs.
+script = script.replace(
+    "kwin_wayland --xwayland --no-lockscreen /usr/libexec/cachuntu-welcome.py",
+    "kwin_wayland --xwayland --no-lockscreen --exit-with-session /usr/libexec/cachuntu-welcome.py")
+start.write_text(script)
 
 desktop = root / "usr/share/applications/kubuntu-calamares.desktop"
 text = desktop.read_text().replace("Kubuntu", "Cachuntu").replace("kubuntu", "Cachuntu")
